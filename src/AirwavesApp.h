@@ -2,8 +2,9 @@
 
 #include "constParameter.h"
 #include "AirwavesTheatre.h"
+#include "AirwavesConnector.h"
+
 #include "ofxCTKinectV2.h"
-#include "ProjectorView.h"
 
 class AirwavesApp: public ofBaseApp{
 
@@ -17,6 +18,7 @@ public:
 
 private:
 	float	_fMainTimer;
+
 //-------------------------------------------------
 //Theatre
 //-------------------------------------------------
@@ -30,25 +32,10 @@ private:
 	AirwavesTheatre		_Theatre;
 
 //-------------------------------------------------
-//Kinect
+//Connector
 //-------------------------------------------------
 public:
-	bool initKinect();
-	void updateKinect();
-	void drawKinect();
-
-	void startKinect();
-	void stopKinect();
-
+	void onConnectorEvent(string& e);
 private:
-	bool				_bHaveUser;
-	stSCREEN_SKELETON	_Skeleton;
-	CTKinectV2			_Kinect;
-	ofImage				_ColorFrame;
-
-//-------------------------------------------------
-//Projector
-//-------------------------------------------------
-private:
-	ProjectorView	_ProjectorView;
+	AirwavesConnector	_Connector;
 };

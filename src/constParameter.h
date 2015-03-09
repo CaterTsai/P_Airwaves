@@ -14,7 +14,10 @@ typedef enum eCHARACTER_TYPE
 	eCHARACTER_NUM
 };
 
+
 const int cSECOND_TEACHING_TIMEOUT = 5.0;
 const int cSECOND_GAMING_TIMEOUT = 10.0;
 const int cSECOND_TVC_PLAY = 5.0;
+
+
 #endif // !AIRWAVES_CONST_PARAMETER
