@@ -9,18 +9,11 @@ void AirwavesApp::setup()
 
 	//Theatre
 	this->initTheatre();
-
-	//Kinect
-	if(!this->initKinect())
-	{
-		ofLog(OF_LOG_ERROR, "Initial Kinect failed");
-		getchar();
-		std::exit(1);
-	}
-
-	//Projector
-	_ProjectorView.setup();
 	
+	//Connector
+	_Connector.initConnector("127.0.0.1", 5566, 2233);
+	ofAddListener(_Connector.AirwavesConnectorEvent, this, &AirwavesApp::onConnectorEvent);
+
 	_fMainTimer = ofGetElapsedTimef();
 }
 
@@ -33,11 +26,8 @@ void AirwavesApp::update()
 	//Theatre
 	_Theatre.updateTheatre(fDelta_);
 
-	//Kinect
-	this->updateKinect();
-
-	//Projector
-	_ProjectorView.update();
+	//Connector
+	_Connector.updateConnector();
 
 	ofSetWindowTitle(ofToString(ofGetFrameRate()));
 }
@@ -48,16 +38,11 @@ void AirwavesApp::draw()
 	this->drawBeforeTheatre();
 	_Theatre.drawTheatre();
 	this->drawAfterTheatre();
-
-	//Projector
-	this->drawKinect();
-	_ProjectorView.draw();
 }
 
 //--------------------------------------------------------------
 void AirwavesApp::exit()
 {
-	this->stopKinect();
 }
 
 //--------------------------------------------------------------
@@ -70,21 +55,13 @@ void AirwavesApp::keyPressed(int key)
 			_Theatre.nextScence();
 			break;
 		}
-	case 'k':
+	case 's':
 		{
-			if(_Kinect.isThreadRunning())
-			{
-				_Kinect.stopThread();
-			}
-			else
-			{
-				_Kinect.startThread();
-			}
+			_Connector.sendCMD(eCONNECTOR_CMD::eD2P_CHARACTOR, "D2P");
 			break;
 		}
-	}
 
-	_ProjectorView.keyPressed(key);
+	}
 }
 #pragma endregion
 
@@ -104,7 +81,6 @@ void AirwavesApp::drawBeforeTheatre()
 	ofPushStyle();
 	{
 		ofSetColor(255);
-		this->drawKinect();
 	}
 	ofPopStyle();
 }
@@ -119,82 +95,21 @@ void AirwavesApp::onTheatreEvent(string& e)
 {
 	if(e == NAME_MGR::S_Teching)
 	{
-		this->startKinect();
+		//TODO:start kinect
 	}
 	else if(e == NAME_MGR::S_Upload)
 	{
-		this->stopKinect();
+		//TODO:stop kinect
 	}
 }
 
 #pragma endregion
 
-#pragma region Kinect
-//-------------------------------------------------
-//Kinect
-bool AirwavesApp::initKinect()
-{
-	bool bResult_ = _Kinect.initialKinectV2();
-	
-	if(bResult_)
-	{
-		_bHaveUser = false;
-		_Kinect.enableSkeleton();
-		_Kinect.enableColorFrame();
-	}
+#pragma region Connector
 
-	return bResult_;
+void AirwavesApp::onConnectorEvent(string& e)
+{
+	cout<<e<<endl;
 }
 
-//-------------------------------------------------
-void AirwavesApp::updateKinect()
-{
-	if(!_Kinect.isThreadRunning())
-	{
-		return;
-	}
-
-	_bHaveUser = _Kinect.getSkeleton(_Skeleton);
-	_Kinect.getColorFrame(_ColorFrame);
-
-	_ProjectorView.setJoint(_bHaveUser, _Skeleton.aJoints);
-}
-
-//-------------------------------------------------
-void AirwavesApp::drawKinect()
-{
-	if(!_Kinect.isThreadRunning())
-	{
-		return;
-	}
-
-	ofPushStyle();
-	{
-		ofSetColor(255);
-		if(_ColorFrame.isAllocated())
-		{
-			_ColorFrame.draw(0, 0, cWINDOW_WIDTH, cWINDOW_HEIGHT);
-		}
-	}
-	ofPopStyle();
-}
-
-//-------------------------------------------------
-void AirwavesApp::startKinect()
-{
-	if(!_Kinect.isThreadRunning())
-	{
-		_Kinect.startThread();
-	}
-};
-
-//-------------------------------------------------
-void AirwavesApp::stopKinect()
-{
-	if(_Kinect.isThreadRunning())
-	{
-		_Kinect.stopThread();
-		_bHaveUser = false;
-	}
-}
 #pragma endregion
