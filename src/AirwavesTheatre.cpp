@@ -220,6 +220,10 @@ void AirwavesTheatre::onTheatreEvent(ofxTheatreEventArgs& e)
 			[] (AirwavesTheatre* ptr){
 				ptr->nextScence();
 			});
+
+		string strEventMsg_ = NAME_MGR::S_Teching;
+		ofNotifyEvent(AirwavesTheaterEvent, strEventMsg_, this);
+
 		bReturnCheck_ = true;
 	}
 	else if(e.strMessage == NAME_MGR::S_Gaming)
@@ -232,10 +236,29 @@ void AirwavesTheatre::onTheatreEvent(ofxTheatreEventArgs& e)
 			cSECOND_GAMING_TIMEOUT,
 			[] (AirwavesTheatre* ptr){
 				ptr->nextScence();
-			});
+			}
+		);
 		bReturnCheck_ = true;
 	}
-
+	else if(e.strMessage == NAME_MGR::S_Upload)
+	{
+		string strEventMsg_ = NAME_MGR::S_Teching;
+		ofNotifyEvent(AirwavesTheaterEvent, strEventMsg_, this);
+		bReturnCheck_ = true;
+	}
+	else if(e.strMessage == NAME_MGR::S_Finish)
+	{
+		this->addTimerTrigger(
+			cSECOND_TVC_PLAY,
+			[] (AirwavesTheatre* ptr){
+				ofxVideoElement* pVideoElement_ = nullptr;
+				if(ptr->_Director.GetElementPtr(NAME_MGR::E_FinishTVC, pVideoElement_))
+				{
+					pVideoElement_->PlayVideo();
+				}
+			}
+		);
+	}
 	if(bReturnCheck_)
 	{
 		return;
@@ -245,6 +268,11 @@ void AirwavesTheatre::onTheatreEvent(ofxTheatreEventArgs& e)
 #pragma region Video event
 	if(	e.strMessage == NAME_MGR::E_CharacterLion || e.strMessage == NAME_MGR::E_CharacterMoney ||
 		e.strMessage == NAME_MGR::E_CharacterAlien || e.strMessage == NAME_MGR::E_CharacterSuperman)
+	{
+		this->nextScence();
+		bReturnCheck_ = true;
+	}
+	else if(e.strMessage == NAME_MGR::E_FinishTVC)
 	{
 		this->nextScence();
 		bReturnCheck_ = true;

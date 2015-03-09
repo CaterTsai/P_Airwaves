@@ -45,8 +45,8 @@ private:
 	void addTimerTrigger(float fTimer, function<void(AirwavesTheatre*)> triggerEvent );	
 	void removeTimerTrigger();
 private:
-	bool					_bEnableTimer;
-	float					_fTimer;
+	bool								_bEnableTimer;
+	float								_fTimer;
 	function<void(AirwavesTheatre*)>	_trigger;
 
 //-------------------------------
