@@ -27,10 +27,10 @@ namespace NAME_MGR
 ///////////////////////////////////////
 	CREATE_VALUE(A_StartBG);
 	CREATE_VALUE(A_StartLoop);
-	CREATE_VALUE(A_CharacterLion);
-	CREATE_VALUE(A_CharacterMoney);
+	CREATE_VALUE(A_CharacterAngle);
 	CREATE_VALUE(A_CharacterAlien);
-	CREATE_VALUE(A_CharacterSuperman);
+	CREATE_VALUE(A_CharacterRoma);
+	CREATE_VALUE(A_CharacterMoney);
 
 	CREATE_VALUE(A_TeachingTitle);
 	
@@ -58,10 +58,10 @@ namespace NAME_MGR
 	CREATE_VALUE(E_StartBG);
 	CREATE_VALUE(E_StartLoop);
 
-	CREATE_VALUE(E_CharacterLion);
-	CREATE_VALUE(E_CharacterMoney);
+	CREATE_VALUE(E_CharacterAngle);
+	CREATE_VALUE(E_CharacterRoma);
 	CREATE_VALUE(E_CharacterAlien);
-	CREATE_VALUE(E_CharacterSuperman);
+	CREATE_VALUE(E_CharacterMoney);
 
 	CREATE_VALUE(E_TeachingTitle);
 

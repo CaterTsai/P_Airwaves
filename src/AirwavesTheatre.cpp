@@ -25,10 +25,11 @@ void AirwavesTheatre::setupTheatre()
 	_Director.AddActor(new ofxVideoActor(NAME_MGR::A_StartLoop, "videos/start_loop.mov", ofPtr<ofxHapPlayer>(new ofxHapPlayer), eBLEND_ALPHA));
 	
 	//S_Character
-	_Director.AddActor(new ofxVideoActor(NAME_MGR::A_CharacterLion, "videos/character_lion.mp4", ofPtr<ofGstVideoPlayer>(new ofGstVideoPlayer)));
+	_Director.AddActor(new ofxVideoActor(NAME_MGR::A_CharacterAngle, "videos/character_angle.mp4", ofPtr<ofGstVideoPlayer>(new ofGstVideoPlayer)));
+	_Director.AddActor(new ofxVideoActor(NAME_MGR::A_CharacterRoma, "videos/character_roma.mp4", ofPtr<ofGstVideoPlayer>(new ofGstVideoPlayer)));
 	_Director.AddActor(new ofxVideoActor(NAME_MGR::A_CharacterMoney, "videos/character_money.mp4", ofPtr<ofGstVideoPlayer>(new ofGstVideoPlayer)));
 	_Director.AddActor(new ofxVideoActor(NAME_MGR::A_CharacterAlien, "videos/character_alien.mp4", ofPtr<ofGstVideoPlayer>(new ofGstVideoPlayer)));
-	_Director.AddActor(new ofxVideoActor(NAME_MGR::A_CharacterSuperman, "videos/character_superman.mp4", ofPtr<ofGstVideoPlayer>(new ofGstVideoPlayer)));
+	
 
 	//S_Teching
 	_Director.AddActor(new ofxImageActor(NAME_MGR::A_TeachingTitle, "images/teaching_title.png", eBLEND_ALPHA));
@@ -67,10 +68,10 @@ void AirwavesTheatre::setupTheatre()
 	_Director.AddElement(NAME_MGR::E_StartLoop, NAME_MGR::P_Start, NAME_MGR::A_StartLoop);
 
 	//S_Character
-	_Director.AddElement(NAME_MGR::E_CharacterLion, NAME_MGR::P_Character, NAME_MGR::A_CharacterLion);
-	_Director.AddElement(NAME_MGR::E_CharacterMoney, NAME_MGR::P_Character, NAME_MGR::A_CharacterMoney);
+	_Director.AddElement(NAME_MGR::E_CharacterAngle, NAME_MGR::P_Character, NAME_MGR::A_CharacterAngle);
+	_Director.AddElement(NAME_MGR::E_CharacterRoma, NAME_MGR::P_Character, NAME_MGR::A_CharacterRoma);
 	_Director.AddElement(NAME_MGR::E_CharacterAlien, NAME_MGR::P_Character, NAME_MGR::A_CharacterAlien);
-	_Director.AddElement(NAME_MGR::E_CharacterSuperman, NAME_MGR::P_Character, NAME_MGR::A_CharacterSuperman);
+	_Director.AddElement(NAME_MGR::E_CharacterMoney, NAME_MGR::P_Character, NAME_MGR::A_CharacterMoney);
 
 	//S_Teaching
 	_Director.AddElement(NAME_MGR::E_TeachingTitle, NAME_MGR::P_Teaching, NAME_MGR::A_TeachingTitle);
@@ -107,7 +108,7 @@ void AirwavesTheatre::setupTheatre()
 	pVideoElement_->SetVideoLoop(true);
 	pVideoElement_->SetVideoAutoPlay(true);
 
-	_Director.GetElementPtr(NAME_MGR::E_CharacterLion, pVideoElement_);
+	_Director.GetElementPtr(NAME_MGR::E_CharacterAngle, pVideoElement_);
 	pVideoElement_->StartEvent();
 	pVideoElement_->SetVideoAutoPlay(false);
 
@@ -119,7 +120,7 @@ void AirwavesTheatre::setupTheatre()
 	pVideoElement_->StartEvent();
 	pVideoElement_->SetVideoAutoPlay(false);
 
-	_Director.GetElementPtr(NAME_MGR::E_CharacterSuperman, pVideoElement_);
+	_Director.GetElementPtr(NAME_MGR::E_CharacterRoma, pVideoElement_);
 	pVideoElement_->StartEvent();
 	pVideoElement_->SetVideoAutoPlay(false);
 
@@ -133,7 +134,7 @@ void AirwavesTheatre::setupTheatre()
 #pragma endregion
 
 	//Default
-	_eCharacterType = eCHARACTER_LION;
+	_eCharacterType = eCHARACTER_ROMA;
 
 	this->setupTimerTrigger();
 
@@ -185,17 +186,9 @@ void AirwavesTheatre::onTheatreEvent(ofxTheatreEventArgs& e)
 		ofxVideoElement* pCharacterVideo_ = nullptr;
 		switch(_eCharacterType)
 		{
-		case eCHARACTER_TYPE::eCHARACTER_LION:
+		case eCHARACTER_TYPE::eCHARACTER_ANGLE:
 			{
-				if(_Director.GetElementPtr(NAME_MGR::E_CharacterLion, pCharacterVideo_))
-				{
-					pCharacterVideo_->PlayVideo();
-				}
-			}
-			break;
-		case eCHARACTER_TYPE::eCHARACTER_MONEY:
-			{
-				if(_Director.GetElementPtr(NAME_MGR::E_CharacterMoney, pCharacterVideo_))
+				if(_Director.GetElementPtr(NAME_MGR::E_CharacterAngle, pCharacterVideo_))
 				{
 					pCharacterVideo_->PlayVideo();
 				}
@@ -209,7 +202,14 @@ void AirwavesTheatre::onTheatreEvent(ofxTheatreEventArgs& e)
 				}
 			}
 			break;
-
+		case eCHARACTER_TYPE::eCHARACTER_ROMA:
+			{
+				if(_Director.GetElementPtr(NAME_MGR::E_CharacterRoma, pCharacterVideo_))
+				{
+					pCharacterVideo_->PlayVideo();
+				}
+			}
+			break;
 		}
 		bReturnCheck_ = true;
 	}
@@ -266,8 +266,8 @@ void AirwavesTheatre::onTheatreEvent(ofxTheatreEventArgs& e)
 #pragma endregion
 
 #pragma region Video event
-	if(	e.strMessage == NAME_MGR::E_CharacterLion || e.strMessage == NAME_MGR::E_CharacterMoney ||
-		e.strMessage == NAME_MGR::E_CharacterAlien || e.strMessage == NAME_MGR::E_CharacterSuperman)
+	if(	e.strMessage == NAME_MGR::E_CharacterAngle || e.strMessage == NAME_MGR::E_CharacterMoney ||
+		e.strMessage == NAME_MGR::E_CharacterAlien || e.strMessage == NAME_MGR::E_CharacterRoma)
 	{
 		this->nextScence();
 		bReturnCheck_ = true;
@@ -283,7 +283,6 @@ void AirwavesTheatre::onTheatreEvent(ofxTheatreEventArgs& e)
 		return;
 	}
 #pragma endregion
-
 
 }
 
