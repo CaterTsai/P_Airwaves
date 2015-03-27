@@ -1,10 +1,14 @@
 #pragma once
 
 #include "constParameter.h"
+#include "ofxCTKinectV2.h"
+#include "ofxXmlSettings.h"
+
 #include "AirwavesTheatre.h"
 #include "AirwavesConnector.h"
+#include "AudioChecker.h"
+#include "ofxCTImageSequence.h"
 
-#include "ofxCTKinectV2.h"
 
 class AirwavesApp: public ofBaseApp{
 
@@ -13,7 +17,7 @@ public:
 	void update();
 	void draw();
 	void exit();
-
+	void reset();
 	void keyPressed(int key);
 
 private:
@@ -32,10 +36,60 @@ private:
 	AirwavesTheatre		_Theatre;
 
 //-------------------------------------------------
+//Audio checker
+//-------------------------------------------------
+public:
+	void onAudioEvent(bool& e);
+
+private:
+	AudioCheck	_MicChecker;
+
+//-------------------------------------------------
+//Image Recoder
+//-------------------------------------------------
+public:
+	void setupImageRecoder();
+	void updateImageRecoder();
+	void drawImageRecoder();
+	void drawCropRecoder();
+	void saveImage();
+	void setDisplay(bool bValue);
+	void onImageRecoderEvent(string& e);
+	
+private:
+	void processImg();
+	void updateCropRect(ofPoint Center);
+	void updateCropRect(float fUpdateScale);
+
+private:
+	bool				_bIsWebcamSetup;
+	bool				_bDisplayWebcam;
+	ofVideoGrabber		_Cam;
+
+	bool				_bDrawCropRect;
+	float				_fCropScale;
+	ofRectangle			_CropRect;
+	
+	int					_iPictureCounter;
+
+	ofxCTImageSequence	_ImageRecorder;
+
+//-------------------------------------------------
 //Connector
 //-------------------------------------------------
 public:
-	void onConnectorEvent(string& e);
+	void onConnectorEvent(pair<eCONNECTOR_CMD, string>& e);
 private:
 	AirwavesConnector	_Connector;
+
+//-------------------------------------------------
+//Config file
+//-------------------------------------------------
+public:
+	void loadconfig();
+	void saveconfig();
+
+private:
+	ofRectangle	_exCropRect;
+
 };

@@ -25,7 +25,7 @@ void AirwavesTheatre::setupTheatre()
 	_Director.AddActor(new ofxVideoActor(NAME_MGR::A_StartLoop, "videos/start_loop.mov", ofPtr<ofxHapPlayer>(new ofxHapPlayer), eBLEND_ALPHA));
 	
 	//S_Character
-	_Director.AddActor(new ofxVideoActor(NAME_MGR::A_CharacterAngle, "videos/character_angle.mp4", ofPtr<ofGstVideoPlayer>(new ofGstVideoPlayer)));
+	_Director.AddActor(new ofxVideoActor(NAME_MGR::A_CharacterAngel, "videos/character_angel.mp4", ofPtr<ofGstVideoPlayer>(new ofGstVideoPlayer)));
 	_Director.AddActor(new ofxVideoActor(NAME_MGR::A_CharacterRoma, "videos/character_roma.mp4", ofPtr<ofGstVideoPlayer>(new ofGstVideoPlayer)));
 	_Director.AddActor(new ofxVideoActor(NAME_MGR::A_CharacterMoney, "videos/character_money.mp4", ofPtr<ofGstVideoPlayer>(new ofGstVideoPlayer)));
 	_Director.AddActor(new ofxVideoActor(NAME_MGR::A_CharacterAlien, "videos/character_alien.mp4", ofPtr<ofGstVideoPlayer>(new ofGstVideoPlayer)));
@@ -68,7 +68,7 @@ void AirwavesTheatre::setupTheatre()
 	_Director.AddElement(NAME_MGR::E_StartLoop, NAME_MGR::P_Start, NAME_MGR::A_StartLoop);
 
 	//S_Character
-	_Director.AddElement(NAME_MGR::E_CharacterAngle, NAME_MGR::P_Character, NAME_MGR::A_CharacterAngle);
+	_Director.AddElement(NAME_MGR::E_CharacterAngel, NAME_MGR::P_Character, NAME_MGR::A_CharacterAngel);
 	_Director.AddElement(NAME_MGR::E_CharacterRoma, NAME_MGR::P_Character, NAME_MGR::A_CharacterRoma);
 	_Director.AddElement(NAME_MGR::E_CharacterAlien, NAME_MGR::P_Character, NAME_MGR::A_CharacterAlien);
 	_Director.AddElement(NAME_MGR::E_CharacterMoney, NAME_MGR::P_Character, NAME_MGR::A_CharacterMoney);
@@ -108,7 +108,7 @@ void AirwavesTheatre::setupTheatre()
 	pVideoElement_->SetVideoLoop(true);
 	pVideoElement_->SetVideoAutoPlay(true);
 
-	_Director.GetElementPtr(NAME_MGR::E_CharacterAngle, pVideoElement_);
+	_Director.GetElementPtr(NAME_MGR::E_CharacterAngel, pVideoElement_);
 	pVideoElement_->StartEvent();
 	pVideoElement_->SetVideoAutoPlay(false);
 
@@ -184,11 +184,13 @@ void AirwavesTheatre::onTheatreEvent(ofxTheatreEventArgs& e)
 	if(e.strMessage == NAME_MGR::S_Character)
 	{
 		ofxVideoElement* pCharacterVideo_ = nullptr;
+		//this->setCharacterType( (eCHARACTER_TYPE)(rand() % cCHARACTER_MAX_TYPE) );
+		this->setCharacterType( eCHARACTER_TYPE::eCHARACTER_ROMA );
 		switch(_eCharacterType)
 		{
-		case eCHARACTER_TYPE::eCHARACTER_ANGLE:
+		case eCHARACTER_TYPE::eCHARACTER_ANGEL:
 			{
-				if(_Director.GetElementPtr(NAME_MGR::E_CharacterAngle, pCharacterVideo_))
+				if(_Director.GetElementPtr(NAME_MGR::E_CharacterAngel, pCharacterVideo_))
 				{
 					pCharacterVideo_->PlayVideo();
 				}
@@ -215,11 +217,11 @@ void AirwavesTheatre::onTheatreEvent(ofxTheatreEventArgs& e)
 	}
 	else if(e.strMessage == NAME_MGR::S_Teching)
 	{
-		this->addTimerTrigger(
-			cSECOND_TEACHING_TIMEOUT,
-			[] (AirwavesTheatre* ptr){
-				ptr->nextScence();
-			});
+		//this->addTimerTrigger(
+		//	cSECOND_TEACHING_TIMEOUT,
+		//	[] (AirwavesTheatre* ptr){
+		//		ptr->nextScence();
+		//	});
 
 		string strEventMsg_ = NAME_MGR::S_Teching;
 		ofNotifyEvent(AirwavesTheaterEvent, strEventMsg_, this);
@@ -242,7 +244,7 @@ void AirwavesTheatre::onTheatreEvent(ofxTheatreEventArgs& e)
 	}
 	else if(e.strMessage == NAME_MGR::S_Upload)
 	{
-		string strEventMsg_ = NAME_MGR::S_Teching;
+		string strEventMsg_ = NAME_MGR::S_Upload;
 		ofNotifyEvent(AirwavesTheaterEvent, strEventMsg_, this);
 		bReturnCheck_ = true;
 	}
@@ -266,7 +268,7 @@ void AirwavesTheatre::onTheatreEvent(ofxTheatreEventArgs& e)
 #pragma endregion
 
 #pragma region Video event
-	if(	e.strMessage == NAME_MGR::E_CharacterAngle || e.strMessage == NAME_MGR::E_CharacterMoney ||
+	if(	e.strMessage == NAME_MGR::E_CharacterAngel || e.strMessage == NAME_MGR::E_CharacterMoney ||
 		e.strMessage == NAME_MGR::E_CharacterAlien || e.strMessage == NAME_MGR::E_CharacterRoma)
 	{
 		this->nextScence();

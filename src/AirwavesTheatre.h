@@ -31,6 +31,10 @@ public:
 	{
 		_eCharacterType = type;
 	}
+	inline eCHARACTER_TYPE getCharacterType() const
+	{
+		return _eCharacterType;
+	}
 
 private:
 	eCHARACTER_TYPE	_eCharacterType;
