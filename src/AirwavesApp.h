@@ -2,12 +2,14 @@
 
 #include "constParameter.h"
 #include "ofxCTKinectV2.h"
+#include "ofxCTImageSequence.h"
+#include "ofxCTSystemCaller.h"
 #include "ofxXmlSettings.h"
 
 #include "AirwavesTheatre.h"
 #include "AirwavesConnector.h"
 #include "AudioChecker.h"
-#include "ofxCTImageSequence.h"
+
 
 
 class AirwavesApp: public ofBaseApp{
@@ -73,6 +75,15 @@ private:
 	int					_iPictureCounter;
 
 	ofxCTImageSequence	_ImageRecorder;
+
+//-------------------------------------------------
+//Video Create
+//-------------------------------------------------
+public:
+	void startVideoCreate();
+	void onVideoCreateEvent(string& e);
+private:
+	ofxCTSystemCaller	_VideoCreate;
 
 //-------------------------------------------------
 //Connector

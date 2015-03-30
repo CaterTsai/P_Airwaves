@@ -13,6 +13,10 @@ void AirwavesApp::setup()
 	//Image Recoder
 	this->setupImageRecoder();
 
+	//Video Create
+	ofAddListener(_VideoCreate.SystemCallerFinishEvent, this, &AirwavesApp::onVideoCreateEvent);
+	_VideoCreate.start();
+
 	//Theatre
 	this->initTheatre();
 	
@@ -61,6 +65,8 @@ void AirwavesApp::draw()
 void AirwavesApp::exit()
 {
 	_ImageRecorder.exit();
+	_VideoCreate.stop();
+	_VideoCreate.signal();
 }
 
 //--------------------------------------------------------------
@@ -78,9 +84,15 @@ void AirwavesApp::keyPressed(int key)
 {
 	switch(key)
 	{
+	case 'k':
+		{
+			this->startVideoCreate();	
+			break;
+		}
 	case 'n':
 		{
 			_Theatre.nextScence();
+			_MicChecker.setCheck(false);
 			break;
 		}
 	case 'd':
@@ -186,7 +198,7 @@ void AirwavesApp::drawAfterTheatre()
 //--------------------------------------------------------------
 void AirwavesApp::onTheatreEvent(string& e)
 {
-	if(e == NAME_MGR::S_Teching)
+	if(e == NAME_MGR::EVENT_StartTeching)
 	{
 		eCHARACTER_TYPE Type_ = _Theatre.getCharacterType();
 		_Connector.sendCMD(eCONNECTOR_CMD::eD2P_SET_CHARACTOR, ofToString(Type_));
@@ -194,7 +206,11 @@ void AirwavesApp::onTheatreEvent(string& e)
 		//Display webcam
 		this->setDisplay(true);
 	}
-	else if(e == NAME_MGR::S_Upload)
+	else if(e == NAME_MGR::EVENT_StartRecord)
+	{
+		_ImageRecorder.startRecode(cRECODE_DURATION);
+	}
+	else if(e == NAME_MGR::EVENT_StartUpload)
 	{
 		_Connector.sendCMD(eCONNECTOR_CMD::eD2P_GAME_TIMEOUT, "");
 
@@ -352,12 +368,12 @@ void AirwavesApp::onImageRecoderEvent(string& e)
 	if(e == "SAVE_FINISH")
 	{
 		ofLog(OF_LOG_NOTICE, "[ofxCTImageSequence] save finish");
-		//this->setupFFmpegCmd();
+		this->startVideoCreate();
 	}
 	else if(e == "RECORD_FINISH")
 	{		
 		ofLog(OF_LOG_NOTICE, "[ofxCTImageSequence] Record Finish!!");
-		this->setDisplay(false);
+		//this->setDisplay(false);
 	}
 }
 
@@ -403,7 +419,32 @@ void AirwavesApp::updateCropRect(float fUpdateScale)
 }
 #pragma endregion
 
+#pragma region Video Create
+//--------------------------------------------------------------
+void AirwavesApp::startVideoCreate()
+{
+	//Create video
+	_VideoCreate.addCMD(cCREATE_IMAGE_SLIDER_CMD);
+	_VideoCreate.addCMD(cCREATE_VIDEO_CMD);
+
+	
+	_VideoCreate.addCMD(cSLIDER_TO_MPEG);
+	_VideoCreate.addCMD(cVIDEO_TO_MPEG);
+
+	_VideoCreate.addCMD(cCOMBIND_VIDEO_CMD);
+
+	_VideoCreate.signal();
+}
+
+//--------------------------------------------------------------
+void AirwavesApp::onVideoCreateEvent(string& e)
+{
+}
+
+#pragma endregion
+
 #pragma region Connector
+//--------------------------------------------------------------
 void AirwavesApp::onConnectorEvent(pair<eCONNECTOR_CMD, string>& e)
 {
 	switch(e.first)

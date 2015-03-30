@@ -217,13 +217,13 @@ void AirwavesTheatre::onTheatreEvent(ofxTheatreEventArgs& e)
 	}
 	else if(e.strMessage == NAME_MGR::S_Teching)
 	{
-		//this->addTimerTrigger(
-		//	cSECOND_TEACHING_TIMEOUT,
-		//	[] (AirwavesTheatre* ptr){
-		//		ptr->nextScence();
-		//	});
+		this->addTimerTrigger(
+			cSECOND_TEACHING_TIMEOUT,
+			[] (AirwavesTheatre* ptr){
+				ptr->nextScence();
+			});
 
-		string strEventMsg_ = NAME_MGR::S_Teching;
+		string strEventMsg_ = NAME_MGR::EVENT_StartTeching;
 		ofNotifyEvent(AirwavesTheaterEvent, strEventMsg_, this);
 
 		bReturnCheck_ = true;
@@ -234,17 +234,19 @@ void AirwavesTheatre::onTheatreEvent(ofxTheatreEventArgs& e)
 		_Director.GetElementPtr(NAME_MGR::E_GameCountdown, pAnimPtr_);
 		pAnimPtr_->PlayAnimation();
 
+		//set recode timer
 		this->addTimerTrigger(
-			cSECOND_GAMING_TIMEOUT,
+			cSECOND_GAMING_RECODEING,
 			[] (AirwavesTheatre* ptr){
-				ptr->nextScence();
+				string strEventMsg_ = NAME_MGR::EVENT_StartRecord;
+				ofNotifyEvent(ptr->AirwavesTheaterEvent, strEventMsg_, ptr);
 			}
 		);
 		bReturnCheck_ = true;
 	}
 	else if(e.strMessage == NAME_MGR::S_Upload)
 	{
-		string strEventMsg_ = NAME_MGR::S_Upload;
+		string strEventMsg_ = NAME_MGR::EVENT_StartUpload;
 		ofNotifyEvent(AirwavesTheaterEvent, strEventMsg_, this);
 		bReturnCheck_ = true;
 	}
@@ -260,6 +262,18 @@ void AirwavesTheatre::onTheatreEvent(ofxTheatreEventArgs& e)
 				}
 			}
 		);
+	}
+	if(bReturnCheck_)
+	{
+		return;
+	}
+#pragma endregion
+
+#pragma region Animation event
+	if( e.strMessage == NAME_MGR::E_GameCountdown)
+	{
+		this->nextScence();
+		bReturnCheck_ = true;
 	}
 	if(bReturnCheck_)
 	{

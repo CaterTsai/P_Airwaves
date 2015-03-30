@@ -82,6 +82,9 @@ namespace NAME_MGR
 ///////////////////////////////////////
 // Event
 ///////////////////////////////////////
+	CREATE_VALUE(EVENT_StartTeching);
+	CREATE_VALUE(EVENT_StartRecord);
+	CREATE_VALUE(EVENT_StartUpload);
 	CREATE_VALUE(EVENT_Reset);
 };
 
