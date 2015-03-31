@@ -184,8 +184,8 @@ void AirwavesTheatre::onTheatreEvent(ofxTheatreEventArgs& e)
 	if(e.strMessage == NAME_MGR::S_Character)
 	{
 		ofxVideoElement* pCharacterVideo_ = nullptr;
-		//this->setCharacterType( (eCHARACTER_TYPE)(rand() % cCHARACTER_MAX_TYPE) );
-		this->setCharacterType( eCHARACTER_TYPE::eCHARACTER_ROMA );
+		this->setCharacterType( (eCHARACTER_TYPE)(rand() % cCHARACTER_MAX_TYPE) );
+		//this->setCharacterType( eCHARACTER_TYPE::eCHARACTER_ALIEN );
 		switch(_eCharacterType)
 		{
 		case eCHARACTER_TYPE::eCHARACTER_ANGEL:
@@ -217,11 +217,11 @@ void AirwavesTheatre::onTheatreEvent(ofxTheatreEventArgs& e)
 	}
 	else if(e.strMessage == NAME_MGR::S_Teching)
 	{
-		this->addTimerTrigger(
-			cSECOND_TEACHING_TIMEOUT,
-			[] (AirwavesTheatre* ptr){
-				ptr->nextScence();
-			});
+		//this->addTimerTrigger(
+		//	cSECOND_TEACHING_TIMEOUT,
+		//	[] (AirwavesTheatre* ptr){
+		//		ptr->nextScence();
+		//	});
 
 		string strEventMsg_ = NAME_MGR::EVENT_StartTeching;
 		ofNotifyEvent(AirwavesTheaterEvent, strEventMsg_, this);

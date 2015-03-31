@@ -53,7 +53,7 @@ static const string cCREATE_IMAGE_SLIDER_CMD = "ffmpeg -y -loop 1 -i data/buffer
 												[3:v]trim=duration=1,fade=t=in:st=0:d=0.1:color=white[v3]; \
 												[4:v]trim=duration=1,fade=t=in:st=0:d=0.1:color=white,fade=t=out:st=0.9:d=0.1:color=white[v4]; \
 												[v0][v1][v2][v3][v4]concat=n=5:v=1:a=0,hflip,format=yuv420p[v]\" \
-												 -r 24 -map \"[v]\"data/buffer/output1.mp4";
+												-map \"[v]\" data/buffer/output1.mp4";
 
 static const string cCREATE_VIDEO_CMD = "ffmpeg -y -i data/" + cVIDEO_BUFFER + "%4d.jpg \
 										 -vf \"scale=" + cVIDEO_SIZE + ", hflip\" -c:v libx264 -profile:v main -r 24 -pix_fmt yuv420p \
@@ -62,8 +62,11 @@ static const string cCREATE_VIDEO_CMD = "ffmpeg -y -i data/" + cVIDEO_BUFFER + "
 static const string cSLIDER_TO_MPEG = "ffmpeg -y -i data/buffer/output1.mp4 -r 24 -c copy -bsf:v h264_mp4toannexb -an -f mpegts data/buffer/output1";
 static const string cVIDEO_TO_MPEG = "ffmpeg -y -i data/buffer/output2.mp4 -r 24 -c copy -bsf:v h264_mp4toannexb -an -f mpegts data/buffer/output2";
 
-static const string cCOMBIND_VIDEO_CMD = "ffmpeg -y -i \"concat:data/buffer/output1|data/buffer/output2\" data/results/test.mp4";
+static const string cCOMBIND_VIDEO_CMD = "ffmpeg -y -i \"concat:data/buffer/output1|data/buffer/output2\" -vf \"scale=" + cVIDEO_SIZE + "\" data/results/";
 static const string cCLEAR_VIDEO_BUFFER_CMD = "del .\\data\\buffer\\pic\\*.jpg";
 static const string cCLEAR_IMAGE_BUFFER_CMD = "del .\\data\\buffer\\videos\\*.jpg";
 
+
+//Video Uploader
+static const string cDEFAULT_URL = "http://127.0.0.1/airwaves/s/upload.php";
 #endif // !AIRWAVES_CONST_PARAMETER

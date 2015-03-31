@@ -5,6 +5,7 @@
 #include "ofxCTImageSequence.h"
 #include "ofxCTSystemCaller.h"
 #include "ofxXmlSettings.h"
+#include "ofxHttpUtils.h"
 
 #include "AirwavesTheatre.h"
 #include "AirwavesConnector.h"
@@ -24,7 +25,7 @@ public:
 
 private:
 	float	_fMainTimer;
-
+	string	_UserID;
 //-------------------------------------------------
 //Theatre
 //-------------------------------------------------
@@ -86,6 +87,17 @@ private:
 	ofxCTSystemCaller	_VideoCreate;
 
 //-------------------------------------------------
+//Video Uploader
+//-------------------------------------------------
+public:
+	void setupVideotUploader();
+	void uploadVideo();
+	void onHttpResponse(ofxHttpResponse& response);
+
+private:
+	ofxHttpUtils	_VideoUploader;
+
+//-------------------------------------------------
 //Connector
 //-------------------------------------------------
 public:
@@ -102,5 +114,5 @@ public:
 
 private:
 	ofRectangle	_exCropRect;
-
+	string		_exActionUrl;
 };

@@ -17,6 +17,9 @@ void AirwavesApp::setup()
 	ofAddListener(_VideoCreate.SystemCallerFinishEvent, this, &AirwavesApp::onVideoCreateEvent);
 	_VideoCreate.start();
 
+	//Video Uploader
+	this->setupVideotUploader();
+
 	//Theatre
 	this->initTheatre();
 	
@@ -28,6 +31,9 @@ void AirwavesApp::setup()
 	//Connector
 	_Connector.initConnector("127.0.0.1", 5566, 2233);
 	ofAddListener(_Connector.AirwavesConnectorEvent, this, &AirwavesApp::onConnectorEvent);
+
+	//User ID
+	_UserID = ofGetTimestampString("%m%d%H%M%S");
 
 	_fMainTimer = ofGetElapsedTimef();
 }
@@ -77,6 +83,9 @@ void AirwavesApp::reset()
 
 	//open micphone checker
 	_MicChecker.setCheck(true);
+
+	//Create User ID
+	_UserID = ofGetTimestampString("%m%d%H%M%S");
 }
 
 //--------------------------------------------------------------
@@ -84,9 +93,9 @@ void AirwavesApp::keyPressed(int key)
 {
 	switch(key)
 	{
-	case 'k':
+	case 'u':
 		{
-			this->startVideoCreate();	
+			//this->uploadVideo("test");	
 			break;
 		}
 	case 'n':
@@ -347,7 +356,7 @@ void AirwavesApp::saveImage()
 
 	if(_iPictureCounter > cPICTURE_NUM)
 	{
-		ofLog(OF_LOG_WARNING, "[ofxCTImageSequence] over picture num");
+		//ofLog(OF_LOG_WARNING, "[ofxCTImageSequence] over picture num");
 		return;
 	}
 	_iPictureCounter++;
@@ -427,11 +436,10 @@ void AirwavesApp::startVideoCreate()
 	_VideoCreate.addCMD(cCREATE_IMAGE_SLIDER_CMD);
 	_VideoCreate.addCMD(cCREATE_VIDEO_CMD);
 
-	
 	_VideoCreate.addCMD(cSLIDER_TO_MPEG);
 	_VideoCreate.addCMD(cVIDEO_TO_MPEG);
 
-	_VideoCreate.addCMD(cCOMBIND_VIDEO_CMD);
+	_VideoCreate.addCMD(cCOMBIND_VIDEO_CMD + _UserID + ".mp4");
 
 	_VideoCreate.signal();
 }
@@ -439,8 +447,40 @@ void AirwavesApp::startVideoCreate()
 //--------------------------------------------------------------
 void AirwavesApp::onVideoCreateEvent(string& e)
 {
+	ofLog(OF_LOG_NOTICE, "[Video Create]Create Video complete");
+	this->uploadVideo();
 }
 
+#pragma endregion
+
+#pragma region Video Uploader
+void AirwavesApp::setupVideotUploader()
+{
+	ofAddListener(_VideoUploader.newResponseEvent, this, &AirwavesApp::onHttpResponse);
+	_VideoUploader.start();
+}
+
+//--------------------------------------------------------------
+void AirwavesApp::uploadVideo()
+{
+	//get video path
+	string strVideoPath_ = ofFilePath::getCurrentExeDir() + "data\\results\\" + _UserID + ".mp4";
+	ofxHttpForm	HttpForm_;
+	HttpForm_.action = _exActionUrl;
+	HttpForm_.method = OFX_HTTP_POST;
+
+	HttpForm_.addFormField("ID", _UserID);
+	HttpForm_.addFile("fileToUpload", strVideoPath_);
+
+	_VideoUploader.addForm(HttpForm_);
+}
+
+//--------------------------------------------------------------
+void AirwavesApp::onHttpResponse(ofxHttpResponse& response)
+{
+	ofLog(OF_LOG_NOTICE, "[video uploader]Upload success!!");
+	_Theatre.nextScence();
+}
 #pragma endregion
 
 #pragma region Connector
@@ -492,8 +532,9 @@ void AirwavesApp::loadconfig()
 	iCropY_ = config_.getValue("CROP:Y", 0, 0);
 	iCropWidth_ = config_.getValue("CROP:WIDTH", cVIDEO_WIDTH, 0);
 	iCropHeight_ = config_.getValue("CROP:HEIGHT", cVIDEO_HEIGHT, 0);
-	
+	_exActionUrl = config_.getValue("UPLOAD_URL", cDEFAULT_URL, 0);
 	_exCropRect.set(iCropX_, iCropY_, iCropWidth_, iCropHeight_);
+	
 }
 
 //--------------------------------------------------------------
