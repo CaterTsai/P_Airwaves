@@ -48,6 +48,7 @@ void AirwavesApp::update()
 	this->updateImageRecoder();
 
 	//Theatre
+	_AnimBGAlpha.update(fDelta_);
 	_Theatre.updateTheatre(fDelta_);
 
 	//Connector
@@ -78,6 +79,8 @@ void AirwavesApp::exit()
 //--------------------------------------------------------------
 void AirwavesApp::reset()
 {
+	_AnimBGAlpha.reset(255);
+	
 	//reset picture conuter
 	_iPictureCounter = 0;
 
@@ -93,9 +96,16 @@ void AirwavesApp::keyPressed(int key)
 {
 	switch(key)
 	{
-	case 'u':
+	case 'x':
 		{
-			//this->uploadVideo("test");	
+			_Theatre.TheatreAnimInit(NAME_MGR::AS_FadeOutTeaching1);
+			_Theatre.TheatreAnimInit(NAME_MGR::AS_DisplaySuccess1);
+			break;
+		}
+	case 'y':
+		{
+			_Theatre.TheatreAnimInit(NAME_MGR::AS_FadeOutTeaching2);
+			_Theatre.TheatreAnimInit(NAME_MGR::AS_DisplaySuccess2);
 			break;
 		}
 	case 'n':
@@ -186,15 +196,23 @@ void AirwavesApp::initTheatre()
 {
 	_Theatre.setupTheatre();
 	ofAddListener(_Theatre.AirwavesTheaterEvent, this, &AirwavesApp::onTheatreEvent);
+
+	//Background
+	_Background.loadImage("images/background.jpg");
+	_AnimBGAlpha.setDuration(cSECOND_BACKGROUND_FADE);
+	_AnimBGAlpha.setRepeatType(AnimRepeat::PLAY_ONCE);
+	_AnimBGAlpha.reset(255);
 }
 
 //--------------------------------------------------------------
 void AirwavesApp::drawBeforeTheatre()
 {
 	ofPushStyle();
-	{
+	{	
 		this->drawImageRecoder();
 
+		ofSetColor(255, 255, 255, _AnimBGAlpha.getCurrentValue());
+		_Background.draw(0, 0);
 	}
 	ofPopStyle();
 }
@@ -207,13 +225,22 @@ void AirwavesApp::drawAfterTheatre()
 //--------------------------------------------------------------
 void AirwavesApp::onTheatreEvent(string& e)
 {
-	if(e == NAME_MGR::EVENT_StartTeching)
+	if(e == NAME_MGR::EVENT_StartTeaching)
 	{
 		eCHARACTER_TYPE Type_ = _Theatre.getCharacterType();
 		_Connector.sendCMD(eCONNECTOR_CMD::eD2P_SET_CHARACTOR, ofToString(Type_));
 
 		//Display webcam
 		this->setDisplay(true);
+	}
+	else if(e == NAME_MGR::EVENT_TeachingFinish)
+	{
+		this->enableBackground();
+		_Theatre.nextScence();
+	}
+	else if(e == NAME_MGR::EVENT_StartGaming)
+	{
+		_Connector.sendCMD(eCONNECTOR_CMD::eD2P_GAME_START, "");
 	}
 	else if(e == NAME_MGR::EVENT_StartRecord)
 	{
@@ -229,6 +256,10 @@ void AirwavesApp::onTheatreEvent(string& e)
 	else if(e == NAME_MGR::EVENT_Reset)
 	{
 		this->reset();
+	}
+	else if(e == NAME_MGR::EVENT_BackgoundDisable)
+	{
+		this->disableBackground();
 	}
 }
 
@@ -439,7 +470,21 @@ void AirwavesApp::startVideoCreate()
 	_VideoCreate.addCMD(cSLIDER_TO_MPEG);
 	_VideoCreate.addCMD(cVIDEO_TO_MPEG);
 
-	_VideoCreate.addCMD(cCOMBIND_VIDEO_CMD + _UserID + ".mp4");
+	switch(_Theatre.getCharacterType())
+	{
+	case eCHARACTER_ANGEL:
+		_VideoCreate.addCMD(cCOMBIND_VIDEO_ANGEL_CMD + _UserID + ".mp4");
+		break;
+	case eCHARACTER_ROMA:
+		_VideoCreate.addCMD(cCOMBIND_VIDEO_ROMA_CMD + _UserID + ".mp4");
+		break;
+	case eCHARACTER_ALIEN:
+		_VideoCreate.addCMD(cCOMBIND_VIDEO_ALIEN_CMD + _UserID + ".mp4");
+		break;
+	case eCHARACTER_MONEY:
+		_VideoCreate.addCMD(cCOMBIND_VIDEO_MONEY_CMD + _UserID + ".mp4");
+		break;
+	}
 
 	_VideoCreate.signal();
 }
@@ -489,11 +534,22 @@ void AirwavesApp::onConnectorEvent(pair<eCONNECTOR_CMD, string>& e)
 {
 	switch(e.first)
 	{
+	case eP2D_TEACHING_CHECK:
+		{
+			if(_Theatre._Director.GetNowScenes()->GetScenesName() == NAME_MGR::S_Teching)
+			{
+				_Theatre.TheatreAnimInit(NAME_MGR::AS_FadeOutTeaching1);
+				_Theatre.TheatreAnimInit(NAME_MGR::AS_DisplaySuccess1);
+			}
+			
+		}
+		break;
 	case eP2D_TEACHING_END:
 		{
 			if(_Theatre._Director.GetNowScenes()->GetScenesName() == NAME_MGR::S_Teching)
 			{
-				_Theatre.nextScence();
+				_Theatre.TheatreAnimInit(NAME_MGR::AS_FadeOutTeaching2);
+				_Theatre.TheatreAnimInit(NAME_MGR::AS_DisplaySuccess2);
 			}
 		}
 		break;

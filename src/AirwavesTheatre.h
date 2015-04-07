@@ -21,6 +21,7 @@ public:
 	void nextScence();
 
 public:
+	bool			_bCanFinish;
 	ofxDirector		_Director;
 
 //-------------------------------

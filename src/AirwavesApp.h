@@ -6,6 +6,7 @@
 #include "ofxCTSystemCaller.h"
 #include "ofxXmlSettings.h"
 #include "ofxHttpUtils.h"
+#include "ofxAnimatableFloat.h"
 
 #include "AirwavesTheatre.h"
 #include "AirwavesConnector.h"
@@ -35,8 +36,27 @@ public:
 	void drawAfterTheatre();
 	void onTheatreEvent(string& e);
 
+public:
+	inline void enableBackground()
+	{
+		if(!_AnimBGAlpha.isAnimating())
+		{
+			_AnimBGAlpha.animateFromTo(0, 255);
+		}
+	}
+
+	inline void disableBackground()
+	{
+		if(!_AnimBGAlpha.isAnimating())
+		{
+			_AnimBGAlpha.animateFromTo(255, 0);
+		}
+	}
+
 private:
 	AirwavesTheatre		_Theatre;
+	ofImage				_Background;
+	ofxAnimatableFloat	_AnimBGAlpha;
 
 //-------------------------------------------------
 //Audio checker

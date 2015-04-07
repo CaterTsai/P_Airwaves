@@ -21,6 +21,7 @@ const int cSECOND_TEACHING_TIMEOUT = 5.0;
 const int cSECOND_GAMING_TIMEOUT = 10.0;
 const int cSECOND_GAMING_RECODEING = 4.0;
 const int cSECOND_TVC_PLAY = 5.0;
+const float cSECOND_BACKGROUND_FADE = 0.5;
 
 //AudioChecker
 const int cAUDIO_BUFFER_SIZE = 32;
@@ -62,7 +63,15 @@ static const string cCREATE_VIDEO_CMD = "ffmpeg -y -i data/" + cVIDEO_BUFFER + "
 static const string cSLIDER_TO_MPEG = "ffmpeg -y -i data/buffer/output1.mp4 -r 24 -c copy -bsf:v h264_mp4toannexb -an -f mpegts data/buffer/output1";
 static const string cVIDEO_TO_MPEG = "ffmpeg -y -i data/buffer/output2.mp4 -r 24 -c copy -bsf:v h264_mp4toannexb -an -f mpegts data/buffer/output2";
 
-static const string cCOMBIND_VIDEO_CMD = "ffmpeg -y -i \"concat:data/buffer/output1|data/buffer/output2\" -vf \"scale=" + cVIDEO_SIZE + "\" data/results/";
+static const string cCOMBIND_VIDEO_ROMA_CMD = "ffmpeg -y -i \"concat:data/buffer/start|data/buffer/output1|data/buffer/output2|data/buffer/roma|data/buffer/end \" \
+											  -vf \"scale=" + cVIDEO_SIZE + "\" data/results/";
+static const string cCOMBIND_VIDEO_ANGEL_CMD = "ffmpeg -y -i \"concat:data/buffer/start|data/buffer/output1|data/buffer/output2|data/buffer/angel|data/buffer/end \" \
+											  -vf \"scale=" + cVIDEO_SIZE + "\" data/results/";
+static const string cCOMBIND_VIDEO_ALIEN_CMD = "ffmpeg -y -i \"concat:data/buffer/start|data/buffer/output1|data/buffer/output2|data/buffer/alien|data/buffer/end \" \
+											  -vf \"scale=" + cVIDEO_SIZE + "\" data/results/";
+static const string cCOMBIND_VIDEO_MONEY_CMD = "ffmpeg -y -i \"concat:data/buffer/start|data/buffer/output1|data/buffer/output2|data/buffer/money|data/buffer/end \" \
+											  -vf \"scale=" + cVIDEO_SIZE + "\" data/results/";
+
 static const string cCLEAR_VIDEO_BUFFER_CMD = "del .\\data\\buffer\\pic\\*.jpg";
 static const string cCLEAR_IMAGE_BUFFER_CMD = "del .\\data\\buffer\\videos\\*.jpg";
 
