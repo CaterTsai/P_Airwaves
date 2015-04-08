@@ -10,8 +10,8 @@
 
 #include "AirwavesTheatre.h"
 #include "AirwavesConnector.h"
+#include "QRCodeConnector.h"
 #include "AudioChecker.h"
-
 
 
 class AirwavesApp: public ofBaseApp{
@@ -126,6 +126,11 @@ private:
 	AirwavesConnector	_Connector;
 
 //-------------------------------------------------
+//QR Code Connector
+//-------------------------------------------------
+private:
+	QRCodeConnector		_QRConnector;
+//-------------------------------------------------
 //Config file
 //-------------------------------------------------
 public:
@@ -135,4 +140,7 @@ public:
 private:
 	ofRectangle	_exCropRect;
 	string		_exActionUrl;
+	string		_exProjectorIP;
+	string		_exQRPrinterIP;
+	string		_exVideoPath;
 };

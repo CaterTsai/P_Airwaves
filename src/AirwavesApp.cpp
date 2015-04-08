@@ -29,9 +29,12 @@ void AirwavesApp::setup()
 	_MicChecker.setCheck(true);
 
 	//Connector
-	_Connector.initConnector("127.0.0.1", 5566, 2233);
+	_Connector.initConnector(_exProjectorIP, 5566, 2233);
 	ofAddListener(_Connector.AirwavesConnectorEvent, this, &AirwavesApp::onConnectorEvent);
 
+	//QR Connector
+	_QRConnector.initQRConnector(_exQRPrinterIP, 11999);
+	
 	//User ID
 	_UserID = ofGetTimestampString("%m%d%H%M%S");
 
@@ -71,6 +74,7 @@ void AirwavesApp::draw()
 //--------------------------------------------------------------
 void AirwavesApp::exit()
 {
+	_Connector.closeConnector();
 	_ImageRecorder.exit();
 	_VideoCreate.stop();
 	_VideoCreate.signal();
@@ -524,6 +528,10 @@ void AirwavesApp::uploadVideo()
 void AirwavesApp::onHttpResponse(ofxHttpResponse& response)
 {
 	ofLog(OF_LOG_NOTICE, "[video uploader]Upload success!!");
+
+	//Print QR Code
+	_QRConnector.printQR(_UserID);
+
 	_Theatre.nextScence();
 }
 #pragma endregion
@@ -588,7 +596,10 @@ void AirwavesApp::loadconfig()
 	iCropY_ = config_.getValue("CROP:Y", 0, 0);
 	iCropWidth_ = config_.getValue("CROP:WIDTH", cVIDEO_WIDTH, 0);
 	iCropHeight_ = config_.getValue("CROP:HEIGHT", cVIDEO_HEIGHT, 0);
+	_exProjectorIP = config_.getValue("PROJECTOR_IP", cDEFAULT_URL, 0);
+	_exQRPrinterIP = config_.getValue("QR_IP", cDEFAULT_URL, 0);
 	_exActionUrl = config_.getValue("UPLOAD_URL", cDEFAULT_URL, 0);
+	_exVideoPath = config_.getValue("VIDEO_PATH", "", 0);
 	_exCropRect.set(iCropX_, iCropY_, iCropWidth_, iCropHeight_);
 	
 }
@@ -601,6 +612,11 @@ void AirwavesApp::saveconfig()
 	config_.setValue("CROP:Y", _CropRect.y);
 	config_.setValue("CROP:WIDTH", _CropRect.width);
 	config_.setValue("CROP:HEIGHT", _CropRect.height);
+
+	config_.setValue("UPLOAD_URL", _exActionUrl);
+	config_.setValue("VIDEO_PATH", _exVideoPath);
+	config_.setValue("QR_IP", _exQRPrinterIP);
+	config_.setValue("PROJECTOR_IP", _exProjectorIP);
 	config_.saveFile("_config.xml");
 }
 #pragma endregion
