@@ -24,9 +24,9 @@ void AirwavesTheatre::setupTheatre()
 	_Director.AddActor(new ofxVideoActor(NAME_MGR::A_StartLoop, "videos/start_loop.mp4", ofPtr<ofGstVideoPlayer>(new ofGstVideoPlayer), eBLEND_SCREEN));
 	
 	//S_Character
-	_Director.AddActor(new ofxVideoActor(NAME_MGR::A_CharacterAngel, "videos/angel/character.mp4", ofPtr<ofGstVideoPlayer>(new ofGstVideoPlayer)));
-	_Director.AddActor(new ofxVideoActor(NAME_MGR::A_CharacterRoma, "videos/roma/character.mp4", ofPtr<ofGstVideoPlayer>(new ofGstVideoPlayer)));
-	_Director.AddActor(new ofxVideoActor(NAME_MGR::A_CharacterMoney, "videos/money/character.mp4", ofPtr<ofGstVideoPlayer>(new ofGstVideoPlayer)));
+	_Director.AddActor(new ofxVideoActor(NAME_MGR::A_CharacterAngel, "videos/angel/character.mp4", ofPtr<ofGstVideoPlayer>(new ofGstVideoPlayer), eBLEND_SCREEN));
+	_Director.AddActor(new ofxVideoActor(NAME_MGR::A_CharacterRoma, "videos/roma/character.mp4", ofPtr<ofGstVideoPlayer>(new ofGstVideoPlayer), eBLEND_SCREEN));
+	_Director.AddActor(new ofxVideoActor(NAME_MGR::A_CharacterMoney, "videos/money/character.mp4", ofPtr<ofGstVideoPlayer>(new ofGstVideoPlayer), eBLEND_SCREEN));
 	_Director.AddActor(new ofxVideoActor(NAME_MGR::A_CharacterAlien, "videos/alien/character.mp4", ofPtr<ofGstVideoPlayer>(new ofGstVideoPlayer), eBLEND_SCREEN));
 	
 	//S_Teching
@@ -38,8 +38,10 @@ void AirwavesTheatre::setupTheatre()
 	_Director.AddActor(new ofxVideoActor(NAME_MGR::A_TeachingSuccess, "videos/teaching_success.mov", ofPtr<ofGstVideoPlayer>(new ofGstVideoPlayer), eBLEND_ALPHA));
 
 	////Angel
-	_Director.AddActor(new ofxVideoActor(NAME_MGR::A_TeachingAngelIcon, "videos/angel/teaching_icon.mov", ofPtr<ofGstVideoPlayer>(new ofGstVideoPlayer), eBLEND_ALPHA));
+	_Director.AddActor(new ofxVideoActor(NAME_MGR::A_TeachingAngelIcon1, "videos/angel/teaching_icon1.mov", ofPtr<ofGstVideoPlayer>(new ofGstVideoPlayer), eBLEND_ALPHA));
+	_Director.AddActor(new ofxVideoActor(NAME_MGR::A_TeachingAngelIcon2, "videos/angel/teaching_icon2.mov", ofPtr<ofGstVideoPlayer>(new ofGstVideoPlayer), eBLEND_ALPHA));
 	_Director.AddActor(new ofxVideoActor(NAME_MGR::A_TeachingAngelMessage1, "videos/angel/teaching_message1.mov", ofPtr<ofGstVideoPlayer>(new ofGstVideoPlayer), eBLEND_ALPHA));
+	_Director.AddActor(new ofxVideoActor(NAME_MGR::A_TeachingAngelMessage2, "videos/angel/teaching_message2.mov", ofPtr<ofGstVideoPlayer>(new ofGstVideoPlayer), eBLEND_ALPHA));
 
 	////Alien
 	_Director.AddActor(new ofxVideoActor(NAME_MGR::A_TeachingAlienIcon, "videos/alien/teaching_icon.mov", ofPtr<ofGstVideoPlayer>(new ofGstVideoPlayer), eBLEND_ALPHA));
@@ -54,9 +56,9 @@ void AirwavesTheatre::setupTheatre()
 	
 	//S_Gaming	
 	_Director.AddActor(new ofxVideoActor(NAME_MGR::A_GamingAngel, "videos/angel/gaming.mp4", ofPtr<ofGstVideoPlayer>(new ofGstVideoPlayer), eBLEND_SCREEN));
-	_Director.AddActor(new ofxVideoActor(NAME_MGR::A_GamingAlien, "videos/angel/gaming.mp4", ofPtr<ofGstVideoPlayer>(new ofGstVideoPlayer), eBLEND_SCREEN));
-	_Director.AddActor(new ofxVideoActor(NAME_MGR::A_GamingRoma, "videos/angel/gaming.mp4", ofPtr<ofGstVideoPlayer>(new ofGstVideoPlayer), eBLEND_SCREEN));
-	_Director.AddActor(new ofxVideoActor(NAME_MGR::A_GamingMoney, "videos/angel/gaming.mp4", ofPtr<ofGstVideoPlayer>(new ofGstVideoPlayer), eBLEND_SCREEN));
+	_Director.AddActor(new ofxVideoActor(NAME_MGR::A_GamingAlien, "videos/alien/gaming.mp4", ofPtr<ofGstVideoPlayer>(new ofGstVideoPlayer), eBLEND_SCREEN));
+	_Director.AddActor(new ofxVideoActor(NAME_MGR::A_GamingRoma, "videos/roma/gaming.mp4", ofPtr<ofGstVideoPlayer>(new ofGstVideoPlayer), eBLEND_SCREEN));
+	_Director.AddActor(new ofxVideoActor(NAME_MGR::A_GamingMoney, "videos/money/gaming.mp4", ofPtr<ofGstVideoPlayer>(new ofGstVideoPlayer), eBLEND_SCREEN));
 
 	//S_Finish
 	_Director.AddActor(new ofxImageActor(NAME_MGR::A_FinishBG, "images/finish_bg.jpg"));
@@ -93,12 +95,12 @@ void AirwavesTheatre::setupTheatre()
 
 	//S_Teaching (defualt is roma)
 	_Director.AddElement(NAME_MGR::E_TeachingTitle, NAME_MGR::P_Teaching, NAME_MGR::A_TeachingTitle);
-	_Director.AddElement(NAME_MGR::E_TeachingCountdown, NAME_MGR::P_Teaching, NAME_MGR::A_Countdown10, 1, ofPoint(cWINDOW_WIDTH/2.0 - 120.0/2, 5), false);
+	_Director.AddElement(NAME_MGR::E_TeachingCountdown, NAME_MGR::P_Teaching, NAME_MGR::A_Countdown15, 1, ofPoint(cWINDOW_WIDTH/2.0 - 120.0/2, 5), false);
 	_Director.AddElement(NAME_MGR::E_TeachingSuccess, NAME_MGR::P_Teaching, NAME_MGR::A_TeachingSuccess, 2, ofPoint(cWINDOW_WIDTH/2.0 - 800.0/2, cWINDOW_HEIGHT - 200), false);
 
-	_Director.AddElement(NAME_MGR::E_TeachingIcon1, NAME_MGR::P_TeachingMessage1, NAME_MGR::A_TeachingRomaIcon1, 1, ofPoint(330, 415));
+	_Director.AddElement(NAME_MGR::E_TeachingIcon1, NAME_MGR::P_TeachingMessage1, NAME_MGR::A_TeachingRomaIcon1, 1, ofPoint(330, 380));
 	_Director.AddElement(NAME_MGR::E_TeachingMessage1, NAME_MGR::P_TeachingMessage1, NAME_MGR::A_TeachingRomaMessage1, 2, ofPoint(cWINDOW_WIDTH/2.0 - 800.0/2, cWINDOW_HEIGHT - 200));
-	_Director.AddElement(NAME_MGR::E_TeachingIcon2, NAME_MGR::P_TeachingMessage2, NAME_MGR::A_TeachingRomaIcon2, 1, ofPoint(330, 415));
+	_Director.AddElement(NAME_MGR::E_TeachingIcon2, NAME_MGR::P_TeachingMessage2, NAME_MGR::A_TeachingRomaIcon2, 1, ofPoint(330, 380));
 	_Director.AddElement(NAME_MGR::E_TeachingMessage2, NAME_MGR::P_TeachingMessage2, NAME_MGR::A_TeachingRomaMessage2, 2, ofPoint(cWINDOW_WIDTH/2.0 - 800.0/2, cWINDOW_HEIGHT - 200));
 	
 	//S_Gaming (defualt is roma)
@@ -282,8 +284,11 @@ void AirwavesTheatre::onTheatreEvent(ofxTheatreEventArgs& e)
 	if(e.strMessage == NAME_MGR::S_Character)
 	{
 		ofxVideoElement* pCharacterVideo_ = nullptr;
-		//this->setCharacterType( (eCHARACTER_TYPE)(rand() % cCHARACTER_MAX_TYPE) );
-		this->setCharacterType( eCHARACTER_TYPE::eCHARACTER_ALIEN );
+		ofxVideoElement* pGamingVideo_ = nullptr;
+		_Director.GetElementPtr(NAME_MGR::E_GameTitle, pGamingVideo_);
+
+		this->setCharacterType( (eCHARACTER_TYPE)(rand() % cCHARACTER_MAX_TYPE) );
+		//this->setCharacterType( eCHARACTER_TYPE::eCHARACTER_ANGEL );
 		switch(_eCharacterType)
 		{
 		case eCHARACTER_TYPE::eCHARACTER_ANGEL:
@@ -292,6 +297,7 @@ void AirwavesTheatre::onTheatreEvent(ofxTheatreEventArgs& e)
 				{
 					pCharacterVideo_->PlayVideo();
 				}
+				pGamingVideo_->ChangeVideoActor(dynamic_cast<ofxVideoActor*>(_Director.GetActor(NAME_MGR::A_GamingAngel)));
 			}
 			break;
 		case eCHARACTER_TYPE::eCHARACTER_ALIEN:
@@ -300,6 +306,7 @@ void AirwavesTheatre::onTheatreEvent(ofxTheatreEventArgs& e)
 				{
 					pCharacterVideo_->PlayVideo();
 				}
+				pGamingVideo_->ChangeVideoActor(dynamic_cast<ofxVideoActor*>(_Director.GetActor(NAME_MGR::A_GamingAlien)));
 			}
 			break;
 		case eCHARACTER_TYPE::eCHARACTER_ROMA:
@@ -308,6 +315,7 @@ void AirwavesTheatre::onTheatreEvent(ofxTheatreEventArgs& e)
 				{
 					pCharacterVideo_->PlayVideo();
 				}
+				pGamingVideo_->ChangeVideoActor(dynamic_cast<ofxVideoActor*>(_Director.GetActor(NAME_MGR::A_GamingRoma)));
 			}
 			break;
 		}
@@ -323,7 +331,7 @@ void AirwavesTheatre::onTheatreEvent(ofxTheatreEventArgs& e)
 		case eCHARACTER_TYPE::eCHARACTER_ANGEL:
 			{
 				//Icon 1
-				pVideoActor_ = dynamic_cast<ofxVideoActor*>(_Director.GetActor(NAME_MGR::A_TeachingAngelIcon));
+				pVideoActor_ = dynamic_cast<ofxVideoActor*>(_Director.GetActor(NAME_MGR::A_TeachingAngelIcon1));
 				_Director.GetElementPtr(NAME_MGR::E_TeachingIcon1, pVideoElement_);
 				pVideoElement_->ChangeVideoActor(pVideoActor_);
 				pVideoElement_->PlayVideo();
@@ -331,6 +339,18 @@ void AirwavesTheatre::onTheatreEvent(ofxTheatreEventArgs& e)
 				//Message 1
 				pVideoActor_ = dynamic_cast<ofxVideoActor*>(_Director.GetActor(NAME_MGR::A_TeachingAngelMessage1));
 				_Director.GetElementPtr(NAME_MGR::E_TeachingMessage1, pVideoElement_);
+				pVideoElement_->ChangeVideoActor(pVideoActor_);
+				pVideoElement_->PlayVideo();
+
+				//Icon 2
+				pVideoActor_ = dynamic_cast<ofxVideoActor*>(_Director.GetActor(NAME_MGR::A_TeachingAngelIcon2));
+				_Director.GetElementPtr(NAME_MGR::E_TeachingIcon2, pVideoElement_);
+				pVideoElement_->ChangeVideoActor(pVideoActor_);
+				pVideoElement_->PlayVideo();
+
+				//Message 2
+				pVideoActor_ = dynamic_cast<ofxVideoActor*>(_Director.GetActor(NAME_MGR::A_TeachingAngelMessage2));
+				_Director.GetElementPtr(NAME_MGR::E_TeachingMessage2, pVideoElement_);
 				pVideoElement_->ChangeVideoActor(pVideoActor_);
 				pVideoElement_->PlayVideo();
 
@@ -400,16 +420,7 @@ void AirwavesTheatre::onTheatreEvent(ofxTheatreEventArgs& e)
 		string strEventMsg_ = NAME_MGR::EVENT_StartUpload;
 		ofNotifyEvent(AirwavesTheaterEvent, strEventMsg_, this);
 		bReturnCheck_ = true;
-		/*this->addTimerTrigger(
-			cSECOND_TVC_PLAY,
-			[] (AirwavesTheatre* ptr){
-				ofxVideoElement* pVideoElement_ = nullptr;
-				if(ptr->_Director.GetElementPtr(NAME_MGR::E_FinishTVC, pVideoElement_))
-				{
-					pVideoElement_->PlayVideo();
-				}
-			}
-		);*/
+
 	}
 	if(bReturnCheck_)
 	{
@@ -445,6 +456,12 @@ void AirwavesTheatre::onTheatreEvent(ofxTheatreEventArgs& e)
 	else if(e.strMessage == NAME_MGR::E_TeachingTitle)
 	{
 		this->TheatreAnimInit(NAME_MGR::AS_FadeInTeaching1);
+
+		//Start countdown
+		ofxVideoElement* pCountdown_ = nullptr;
+		_Director.GetElementPtr(NAME_MGR::E_TeachingCountdown, pCountdown_);
+		pCountdown_->SetVisible(true);
+		pCountdown_->PlayVideo();
 
 		string strEventMsg_ = NAME_MGR::EVENT_BackgoundDisable;
 		ofNotifyEvent(AirwavesTheaterEvent, strEventMsg_, this);

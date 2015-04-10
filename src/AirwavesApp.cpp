@@ -237,6 +237,14 @@ void AirwavesApp::onTheatreEvent(string& e)
 		//Display webcam
 		this->setDisplay(true);
 	}
+	else if(e == NAME_MGR::EVENT_TeachingTimeout)
+	{
+		eCHARACTER_TYPE Type_ = _Theatre.getCharacterType();
+		_Connector.sendCMD(eCONNECTOR_CMD::eD2P_TEACHING_TIMEOUT, ofToString(Type_));
+		
+		this->enableBackground();
+		_Theatre.nextScence();
+	}
 	else if(e == NAME_MGR::EVENT_TeachingFinish)
 	{
 		this->enableBackground();

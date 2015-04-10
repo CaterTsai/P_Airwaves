@@ -37,8 +37,10 @@ namespace NAME_MGR
 	CREATE_VALUE(A_TeachingTitle);
 	CREATE_VALUE(A_TeachingSuccess);
 
-	CREATE_VALUE(A_TeachingAngelIcon);
+	CREATE_VALUE(A_TeachingAngelIcon1);
+	CREATE_VALUE(A_TeachingAngelIcon2);
 	CREATE_VALUE(A_TeachingAngelMessage1);
+	CREATE_VALUE(A_TeachingAngelMessage2);
 	
 	CREATE_VALUE(A_TeachingAlienIcon);
 	CREATE_VALUE(A_TeachingAlienMessage1);
