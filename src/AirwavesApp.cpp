@@ -182,6 +182,11 @@ void AirwavesApp::keyPressed(int key)
 			}
 		}
 		break;
+	case 'c':
+		{
+			_Cam.videoSettings();
+		}
+		break;
 	case 's':
 		{
 			this->saveconfig();
@@ -256,6 +261,7 @@ void AirwavesApp::onTheatreEvent(string& e)
 	}
 	else if(e == NAME_MGR::EVENT_StartRecord)
 	{
+		//ofSetFrameRate(24);
 		_ImageRecorder.startRecode(cRECODE_DURATION);
 	}
 	else if(e == NAME_MGR::EVENT_StartUpload)
@@ -425,6 +431,7 @@ void AirwavesApp::onImageRecoderEvent(string& e)
 	else if(e == "RECORD_FINISH")
 	{		
 		ofLog(OF_LOG_NOTICE, "[ofxCTImageSequence] Record Finish!!");
+		//ofSetFrameRate(60);
 		//this->setDisplay(false);
 	}
 }
@@ -454,7 +461,7 @@ void AirwavesApp::updateCropRect(ofPoint Center)
 	}
 
 	_CropRect.setFromCenter(Center, _CropRect.width, _CropRect.height);
-
+	_ImageRecorder.setCropRect(_CropRect);
 }
 
 //--------------------------------------------------------------
@@ -467,7 +474,19 @@ void AirwavesApp::updateCropRect(float fUpdateScale)
 
 	_fCropScale *= fUpdateScale;
 	_CropRect.scaleFromCenter(fUpdateScale);
+	_CropRect.width = static_cast<int>(_CropRect.width + 0.5);
+	_CropRect.height = static_cast<int>(_CropRect.height + 0.5);
 
+	if((int)_CropRect.width % 2 != 0)
+	{
+		_CropRect.width--;
+	}
+	if((int)_CropRect.height % 2 != 0)
+	{
+		_CropRect.height--;
+	}
+
+	_ImageRecorder.setCropRect(_CropRect);
 }
 #pragma endregion
 

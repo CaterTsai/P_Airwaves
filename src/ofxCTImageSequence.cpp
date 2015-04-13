@@ -32,7 +32,7 @@ void ofxImageSequenceUnit::threadedFunction()
 			unlock();
 			if(_bNeedCrop)
 			{
-				imgUnit_.image.crop(_CropRect.x, _CropRect.y, _CropRect.width, _CropRect.height);
+				imgUnit_.image.crop(imgUnit_.image.getWidth() - (_CropRect.x + _CropRect.width), _CropRect.y, _CropRect.width, _CropRect.height);
 			}
 			
 			ofSaveImage(imgUnit_.image, imgUnit_.strFilename, ofImageQualityType::OF_IMAGE_QUALITY_HIGH);
@@ -170,7 +170,6 @@ void ofxCTImageSequence::addFrame(ofPixels	pixel)
 	char fileName[500];
 	sprintf(fileName,  "%s%.4i.%s" , _strPrefix.c_str(), _iCounter, _strFormat.c_str());     
 	_iCounter++;
-
 	int iListIndex_ = _iCounter % _ImgSequenceUnitList.size();
 	_ImgSequenceUnitList[iListIndex_]->addFrame(fileName, pixel);
 	_ImgSequenceUnitList[iListIndex_]->signal();
