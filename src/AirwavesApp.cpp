@@ -93,6 +93,8 @@ void AirwavesApp::reset()
 
 	//Create User ID
 	_UserID = ofGetTimestampString("%m%d%H%M%S");
+
+	_Connector.sendCMD(eD2P_RESET);
 }
 
 //--------------------------------------------------------------
@@ -100,18 +102,6 @@ void AirwavesApp::keyPressed(int key)
 {
 	switch(key)
 	{
-	case 'x':
-		{
-			_Theatre.TheatreAnimInit(NAME_MGR::AS_FadeOutTeaching1);
-			_Theatre.TheatreAnimInit(NAME_MGR::AS_DisplaySuccess1);
-			break;
-		}
-	case 'y':
-		{
-			_Theatre.TheatreAnimInit(NAME_MGR::AS_FadeOutTeaching2);
-			_Theatre.TheatreAnimInit(NAME_MGR::AS_DisplaySuccess2);
-			break;
-		}
 	case 'n':
 		{
 			_Theatre.nextScence();
