@@ -25,6 +25,7 @@ public:
 	void keyPressed(int key);
 
 private:
+	bool	_bCtrlMode;
 	float	_fMainTimer;
 	string	_UserID;
 //-------------------------------------------------
@@ -139,6 +140,7 @@ public:
 
 private:
 	ofRectangle	_exCropRect;
+	float		_exAudioThreshold;
 	string		_exActionUrl;
 	string		_exProjectorIP;
 	string		_exQRPrinterIP;

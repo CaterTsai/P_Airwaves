@@ -6,7 +6,7 @@
 class AudioCheck : public ofBaseSoundInput
 {
 public:
-	void setup();
+	void setup(float fAudioThreshold = cAUDIO_TRIGGER_LIMIT);
 	void audioIn(float * input, int bufferSize, int nChannels);
 
 public:
@@ -20,7 +20,7 @@ public:
 
 private:
 	bool			_bStartCheck;
-	
+	float			_fAudioThreshold;
 	ofSoundStream	_soundStream;
 };
 

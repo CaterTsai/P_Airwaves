@@ -95,7 +95,7 @@ void AirwavesTheatre::setupTheatre()
 
 	//S_Teaching (defualt is roma)
 	_Director.AddElement(NAME_MGR::E_TeachingTitle, NAME_MGR::P_Teaching, NAME_MGR::A_TeachingTitle);
-	_Director.AddElement(NAME_MGR::E_TeachingCountdown, NAME_MGR::P_Teaching, NAME_MGR::A_Countdown15, 1, ofPoint(cWINDOW_WIDTH/2.0 - 120.0/2, 5), false);
+	_Director.AddElement(NAME_MGR::E_TeachingCountdown, NAME_MGR::P_Teaching, NAME_MGR::A_Countdown20, 1, ofPoint(cWINDOW_WIDTH - 150.0, 5), false);
 	_Director.AddElement(NAME_MGR::E_TeachingSuccess, NAME_MGR::P_Teaching, NAME_MGR::A_TeachingSuccess, 2, ofPoint(cWINDOW_WIDTH/2.0 - 800.0/2, cWINDOW_HEIGHT - 200), false);
 
 	_Director.AddElement(NAME_MGR::E_TeachingIcon1, NAME_MGR::P_TeachingMessage1, NAME_MGR::A_TeachingRomaIcon1, 1, ofPoint(330, 380));
@@ -105,11 +105,11 @@ void AirwavesTheatre::setupTheatre()
 	
 	//S_Gaming (defualt is roma)
 	_Director.AddElement(NAME_MGR::E_GameTitle, NAME_MGR::P_Gaming, NAME_MGR::A_GamingRoma);
-	_Director.AddElement(NAME_MGR::E_GameCountdown, NAME_MGR::P_Gaming, NAME_MGR::A_Countdown10, 1, ofPoint(cWINDOW_WIDTH/2.0 - 120.0/2, 5), false);
+	_Director.AddElement(NAME_MGR::E_GameCountdown, NAME_MGR::P_Gaming, NAME_MGR::A_Countdown20, 1, ofPoint(cWINDOW_WIDTH - 150.0, 5), false);
 
 	//S_Finish
-	_Director.AddElement(NAME_MGR::E_FinishBG, NAME_MGR::P_Finish, NAME_MGR::A_FinishBG);
-	_Director.AddElement(NAME_MGR::E_FinishTVC, NAME_MGR::P_Finish, NAME_MGR::A_FinishTVC);
+	_Director.AddElement(NAME_MGR::E_FinishTVC, NAME_MGR::P_Finish, NAME_MGR::A_FinishTVC, 10);
+	_Director.AddElement(NAME_MGR::E_FinishBG, NAME_MGR::P_Finish, NAME_MGR::A_FinishBG, 0);
 #pragma endregion
 
 #pragma region Translate Element
@@ -191,7 +191,7 @@ void AirwavesTheatre::setupTheatre()
 	//Default
 	_eCharacterType = eCHARACTER_ROMA;
 	_bCanFinish = false;
-
+	_Counter = 0;
 	this->setupTimerTrigger();
 
 	ofAddListener(ofxTheatreEventArgs::TheatreEvent, this, &AirwavesTheatre::onTheatreEvent);
@@ -287,8 +287,10 @@ void AirwavesTheatre::onTheatreEvent(ofxTheatreEventArgs& e)
 		ofxVideoElement* pGamingVideo_ = nullptr;
 		_Director.GetElementPtr(NAME_MGR::E_GameTitle, pGamingVideo_);
 
-		//this->setCharacterType( (eCHARACTER_TYPE)(rand() % cCHARACTER_MAX_TYPE) );
-		this->setCharacterType( eCHARACTER_TYPE::eCHARACTER_ANGEL );
+		
+		this->setCharacterType( (eCHARACTER_TYPE)(_Counter % cCHARACTER_MAX_TYPE) );
+		_Counter++;
+		//this->setCharacterType( eCHARACTER_TYPE::eCHARACTER_ALIEN );
 		switch(_eCharacterType)
 		{
 		case eCHARACTER_TYPE::eCHARACTER_ANGEL:
@@ -508,6 +510,9 @@ void AirwavesTheatre::onTheatreEvent(ofxTheatreEventArgs& e)
 	}
 	else if(e.strMessage == NAME_MGR::E_FinishTVC)
 	{	
+		//ofxBaseElement* pTVCBackground_ = nullptr;
+		//_Director.GetElementPtr(NAME_MGR::E_FinishBG, pTVCBackground_);
+		//pTVCBackground_->SetVisible(true);
 		bReturnCheck_ = true;
 	}
 	

@@ -24,7 +24,7 @@ void AirwavesApp::setup()
 	this->initTheatre();
 	
 	//Audio
-	_MicChecker.setup();
+	_MicChecker.setup(_exAudioThreshold);
 	ofAddListener(_MicChecker._AudioEvent, this, &AirwavesApp::onAudioEvent);
 	_MicChecker.setCheck(true);
 
@@ -37,6 +37,10 @@ void AirwavesApp::setup()
 	
 	//User ID
 	_UserID = ofGetTimestampString("%m%d%H%M%S");
+
+	_bCtrlMode = false;
+	ofHideCursor();
+	ofToggleFullscreen();
 
 	_fMainTimer = ofGetElapsedTimef();
 }
@@ -102,6 +106,20 @@ void AirwavesApp::keyPressed(int key)
 {
 	switch(key)
 	{
+	case 'f':
+		{
+			_bCtrlMode ^= true;
+			if(_bCtrlMode)
+			{
+				ofShowCursor();
+			}
+			else
+			{
+				ofHideCursor();
+			}
+			ofToggleFullscreen();
+		}
+		break;
 	case 'n':
 		{
 			_Theatre.nextScence();
@@ -174,10 +192,13 @@ void AirwavesApp::keyPressed(int key)
 		break;
 	case 'c':
 		{
-			_Cam.videoSettings();
+			if(_bDrawCropRect)
+			{
+				_Cam.videoSettings();
+			}
 		}
 		break;
-	case 's':
+	case '=':
 		{
 			this->saveconfig();
 			ofLog(OF_LOG_NOTICE, "[Main] Save config complete");
@@ -547,7 +568,7 @@ void AirwavesApp::onHttpResponse(ofxHttpResponse& response)
 	ofLog(OF_LOG_NOTICE, "[video uploader]Upload success!!");
 
 	//Print QR Code
-	_QRConnector.printQR(_UserID);
+	_QRConnector.printQR(cFB_SHARE_URL + _UserID);
 
 	_Theatre.nextScence();
 }
@@ -618,6 +639,7 @@ void AirwavesApp::loadconfig()
 	_exActionUrl = config_.getValue("UPLOAD_URL", cDEFAULT_URL, 0);
 	_exVideoPath = config_.getValue("VIDEO_PATH", "", 0);
 	_exCropRect.set(iCropX_, iCropY_, iCropWidth_, iCropHeight_);
+	_exAudioThreshold = config_.getValue("AUDIO_THRESHOLD", cAUDIO_TRIGGER_LIMIT, 0);
 	
 }
 

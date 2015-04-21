@@ -23,7 +23,7 @@ public:
 public:
 	bool			_bCanFinish;
 	ofxDirector		_Director;
-
+	int				_Counter;
 //-------------------------------
 //Character
 //-------------------------------

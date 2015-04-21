@@ -19,7 +19,7 @@ typedef enum eCHARACTER_TYPE
 const eCHARACTER_TYPE cCHARACTER_MAX_TYPE = eCHARACTER_MONEY;
 const int cSECOND_TEACHING_TIMEOUT = 5.0;
 const int cSECOND_GAMING_TIMEOUT = 10.0;
-const int cSECOND_GAMING_RECODEING = 3.0;
+const int cSECOND_GAMING_RECODEING = 7.0;
 const int cSECOND_TVC_PLAY = 5.0;
 const float cSECOND_BACKGROUND_FADE = 0.5;
 
@@ -33,7 +33,7 @@ static const string cVIDEO_BUFFER = "buffer/videos/";
 static const string cPICTURE_BUFFER = "buffer/pic/";
 static const int cPICTURE_NUM = 5;
 static const string cPHOTO_FORMAT = "jpg";
-static const float cRECODE_DURATION = 5.0; //second
+static const float cRECODE_DURATION = 12.0; //second
 
 //Video creater
 static const string cVIDEO_PATH = "results/";
@@ -42,19 +42,30 @@ static const int cVIDEO_HEIGHT = 480;
 static const string cVIDEO_SIZE = "640:480";
 static const float cCROP_ASPECT_RADIO = 640;
 
+//static const string cCREATE_IMAGE_SLIDER_CMD = "ffmpeg -y -loop 1 -i data/buffer/pic/1.jpg \
+//												-loop 1 -i data/buffer/pic/2.jpg \
+//												-loop 1 -i data/buffer/pic/3.jpg \
+//												-loop 1 -i data/buffer/pic/4.jpg \
+//												-loop 1 -i data/buffer/pic/5.jpg \
+//												-filter_complex \" \
+//												[0:v]trim=duration=1,fade=t=in:st=0:d=0.1:color=white[v0]; \
+//												[1:v]trim=duration=1,fade=t=in:st=0:d=0.1:color=white[v1]; \
+//												[2:v]trim=duration=1,fade=t=in:st=0:d=0.1:color=white[v2]; \
+//												[3:v]trim=duration=1,fade=t=in:st=0:d=0.1:color=white[v3]; \
+//												[4:v]trim=duration=1,fade=t=in:st=0:d=0.1:color=white,fade=t=out:st=0.9:d=0.1:color=white[v4]; \
+//												[v0][v1][v2][v3][v4]concat=n=5:v=1:a=0,hflip,format=yuv420p[v]\" \
+//												-map \"[v]\" data/buffer/output1.mp4";
+
 static const string cCREATE_IMAGE_SLIDER_CMD = "ffmpeg -y -loop 1 -i data/buffer/pic/1.jpg \
 												-loop 1 -i data/buffer/pic/2.jpg \
 												-loop 1 -i data/buffer/pic/3.jpg \
-												-loop 1 -i data/buffer/pic/4.jpg \
-												-loop 1 -i data/buffer/pic/5.jpg \
 												-filter_complex \" \
 												[0:v]trim=duration=1,fade=t=in:st=0:d=0.1:color=white[v0]; \
 												[1:v]trim=duration=1,fade=t=in:st=0:d=0.1:color=white[v1]; \
-												[2:v]trim=duration=1,fade=t=in:st=0:d=0.1:color=white[v2]; \
-												[3:v]trim=duration=1,fade=t=in:st=0:d=0.1:color=white[v3]; \
-												[4:v]trim=duration=1,fade=t=in:st=0:d=0.1:color=white,fade=t=out:st=0.9:d=0.1:color=white[v4]; \
-												[v0][v1][v2][v3][v4]concat=n=5:v=1:a=0,hflip,format=yuv420p[v]\" \
+												[2:v]trim=duration=1,fade=t=in:st=0:d=0.1:color=white,fade=t=out:st=0.9:d=0.1:color=white[v2]; \
+												[v0][v1][v2]concat=n=3:v=1:a=0,hflip,format=yuv420p[v]\" \
 												-map \"[v]\" data/buffer/output1.mp4";
+
 
 static const string cCREATE_VIDEO_CMD = "ffmpeg -y -i data/" + cVIDEO_BUFFER + "%4d.jpg \
 										 -vf \"scale=" + cVIDEO_SIZE + ", hflip\" -c:v libx264 -profile:v main -r 24 -pix_fmt yuv420p \
@@ -82,4 +93,5 @@ static const string cCLEAR_IMAGE_BUFFER_CMD = "del .\\data\\buffer\\videos\\*.jp
 
 //Video Uploader
 static const string cDEFAULT_URL = "http://127.0.0.1/airwaves/s/upload.php";
+static const string cFB_SHARE_URL = "http://www.facebook.com/sharer/sharer.php?u=http://airwaves.artgital.com/airwaves/viewer/index.php?id=";
 #endif // !AIRWAVES_CONST_PARAMETER
