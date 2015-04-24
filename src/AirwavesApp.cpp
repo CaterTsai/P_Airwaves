@@ -29,8 +29,17 @@ void AirwavesApp::setup()
 	_MicChecker.setCheck(true);
 
 	//Connector
-	_Connector.initConnector(_exProjectorIP, 5566, 2233);
-	ofAddListener(_Connector.AirwavesConnectorEvent, this, &AirwavesApp::onConnectorEvent);
+	if(_exUseSerial)
+	{
+		ofPtr<SerialConnector> pConnector_ = ofPtr<SerialConnector>(new SerialConnector(_exCOM));
+		_Connector = pConnector_;
+	}
+	else
+	{
+		ofPtr<UDPConnector> pConnector_ = ofPtr<UDPConnector>(new UDPConnector(_exProjectorIP, 5566, 2233));
+		_Connector = pConnector_;
+	}	
+	ofAddListener(_Connector->AirwavesConnectorEvent, this, &AirwavesApp::onConnectorEvent);
 
 	//QR Connector
 	_QRConnector.initQRConnector(_exQRPrinterIP, 11999);
@@ -59,7 +68,7 @@ void AirwavesApp::update()
 	_Theatre.updateTheatre(fDelta_);
 
 	//Connector
-	_Connector.updateConnector();
+	_Connector->updateConnector();
 
 	ofSetWindowTitle(ofToString(ofGetFrameRate()));
 }
@@ -78,7 +87,7 @@ void AirwavesApp::draw()
 //--------------------------------------------------------------
 void AirwavesApp::exit()
 {
-	_Connector.closeConnector();
+	_Connector->closeConnector();
 	_ImageRecorder.exit();
 	_VideoCreate.stop();
 	_VideoCreate.signal();
@@ -98,7 +107,7 @@ void AirwavesApp::reset()
 	//Create User ID
 	_UserID = ofGetTimestampString("%m%d%H%M%S");
 
-	_Connector.sendCMD(eD2P_RESET);
+	_Connector->sendCMD(eD2P_RESET);
 }
 
 //--------------------------------------------------------------
@@ -131,6 +140,15 @@ void AirwavesApp::keyPressed(int key)
 			if(_Theatre._Director.GetNowScenes()->GetScenesName() == NAME_MGR::S_Start)
 			{
 				_bDrawCropRect ^= true;
+
+				if(_bDrawCropRect)
+				{
+					_MicChecker.setCheck(false);
+				}
+				else
+				{
+					_MicChecker.setCheck(true);
+				}
 			}
 		}
 		break;
@@ -138,7 +156,7 @@ void AirwavesApp::keyPressed(int key)
 		{
 			if(_bDrawCropRect)
 			{
-				this->updateCropRect(1.05);
+				this->updateCropRect(1.02);
 			}
 		}
 		break;
@@ -146,7 +164,7 @@ void AirwavesApp::keyPressed(int key)
 		{
 			if(_bDrawCropRect)
 			{
-				this->updateCropRect(0.95);
+				this->updateCropRect(0.98);
 			}
 		}
 		break;
@@ -248,7 +266,7 @@ void AirwavesApp::onTheatreEvent(string& e)
 	if(e == NAME_MGR::EVENT_StartTeaching)
 	{
 		eCHARACTER_TYPE Type_ = _Theatre.getCharacterType();
-		_Connector.sendCMD(eCONNECTOR_CMD::eD2P_SET_CHARACTOR, ofToString(Type_));
+		_Connector->sendCMD(eCONNECTOR_CMD::eD2P_SET_CHARACTOR, ofToString(Type_));
 
 		//Display webcam
 		this->setDisplay(true);
@@ -256,7 +274,7 @@ void AirwavesApp::onTheatreEvent(string& e)
 	else if(e == NAME_MGR::EVENT_TeachingTimeout)
 	{
 		eCHARACTER_TYPE Type_ = _Theatre.getCharacterType();
-		_Connector.sendCMD(eCONNECTOR_CMD::eD2P_TEACHING_TIMEOUT, ofToString(Type_));
+		_Connector->sendCMD(eCONNECTOR_CMD::eD2P_TEACHING_TIMEOUT, ofToString(Type_));
 		
 		this->enableBackground();
 		_Theatre.nextScence();
@@ -268,7 +286,7 @@ void AirwavesApp::onTheatreEvent(string& e)
 	}
 	else if(e == NAME_MGR::EVENT_StartGaming)
 	{
-		_Connector.sendCMD(eCONNECTOR_CMD::eD2P_GAME_START, "");
+		_Connector->sendCMD(eCONNECTOR_CMD::eD2P_GAME_START, "");
 	}
 	else if(e == NAME_MGR::EVENT_StartRecord)
 	{
@@ -277,7 +295,7 @@ void AirwavesApp::onTheatreEvent(string& e)
 	}
 	else if(e == NAME_MGR::EVENT_StartUpload)
 	{
-		_Connector.sendCMD(eCONNECTOR_CMD::eD2P_GAME_TIMEOUT, "");
+		_Connector->sendCMD(eCONNECTOR_CMD::eD2P_GAME_TIMEOUT, "");
 
 		//Close webcam
 		this->setDisplay(false);
@@ -634,6 +652,8 @@ void AirwavesApp::loadconfig()
 	iCropY_ = config_.getValue("CROP:Y", 0, 0);
 	iCropWidth_ = config_.getValue("CROP:WIDTH", cVIDEO_WIDTH, 0);
 	iCropHeight_ = config_.getValue("CROP:HEIGHT", cVIDEO_HEIGHT, 0);
+	_exUseSerial = (config_.getValue("USE_SERIAL", 0, 0) == 1);
+	_exCOM = config_.getValue("COM", "COM3", 0);
 	_exProjectorIP = config_.getValue("PROJECTOR_IP", cDEFAULT_URL, 0);
 	_exQRPrinterIP = config_.getValue("QR_IP", cDEFAULT_URL, 0);
 	_exActionUrl = config_.getValue("UPLOAD_URL", cDEFAULT_URL, 0);
@@ -652,10 +672,14 @@ void AirwavesApp::saveconfig()
 	config_.setValue("CROP:WIDTH", _CropRect.width);
 	config_.setValue("CROP:HEIGHT", _CropRect.height);
 
+	config_.setValue("USE_SERIAL", _exUseSerial);
+	config_.setValue("COM", _exCOM);
+
 	config_.setValue("UPLOAD_URL", _exActionUrl);
 	config_.setValue("VIDEO_PATH", _exVideoPath);
 	config_.setValue("QR_IP", _exQRPrinterIP);
 	config_.setValue("PROJECTOR_IP", _exProjectorIP);
+	config_.setValue("AUDIO_THRESHOLD", _exAudioThreshold);
 	config_.saveFile("_config.xml");
 }
 #pragma endregion

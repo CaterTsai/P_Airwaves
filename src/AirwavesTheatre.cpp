@@ -286,11 +286,8 @@ void AirwavesTheatre::onTheatreEvent(ofxTheatreEventArgs& e)
 		ofxVideoElement* pCharacterVideo_ = nullptr;
 		ofxVideoElement* pGamingVideo_ = nullptr;
 		_Director.GetElementPtr(NAME_MGR::E_GameTitle, pGamingVideo_);
-
-		
 		this->setCharacterType( (eCHARACTER_TYPE)(_Counter % cCHARACTER_MAX_TYPE) );
 		_Counter++;
-		//this->setCharacterType( eCHARACTER_TYPE::eCHARACTER_ALIEN );
 		switch(_eCharacterType)
 		{
 		case eCHARACTER_TYPE::eCHARACTER_ANGEL:

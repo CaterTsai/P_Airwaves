@@ -9,7 +9,8 @@
 #include "ofxAnimatableFloat.h"
 
 #include "AirwavesTheatre.h"
-#include "AirwavesConnector.h"
+#include "UDPConnector.h"
+#include "SerialConnector.h"
 #include "QRCodeConnector.h"
 #include "AudioChecker.h"
 
@@ -124,7 +125,7 @@ private:
 public:
 	void onConnectorEvent(pair<eCONNECTOR_CMD, string>& e);
 private:
-	AirwavesConnector	_Connector;
+	ofPtr<AirwavesConnector>	_Connector;
 
 //-------------------------------------------------
 //QR Code Connector
@@ -141,6 +142,8 @@ public:
 private:
 	ofRectangle	_exCropRect;
 	float		_exAudioThreshold;
+	bool		_exUseSerial;
+	string		_exCOM;
 	string		_exActionUrl;
 	string		_exProjectorIP;
 	string		_exQRPrinterIP;

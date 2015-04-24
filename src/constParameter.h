@@ -19,7 +19,7 @@ typedef enum eCHARACTER_TYPE
 const eCHARACTER_TYPE cCHARACTER_MAX_TYPE = eCHARACTER_MONEY;
 const int cSECOND_TEACHING_TIMEOUT = 5.0;
 const int cSECOND_GAMING_TIMEOUT = 10.0;
-const int cSECOND_GAMING_RECODEING = 7.0;
+const int cSECOND_GAMING_RECODEING = 4.0;
 const int cSECOND_TVC_PLAY = 5.0;
 const float cSECOND_BACKGROUND_FADE = 0.5;
 
@@ -92,6 +92,6 @@ static const string cCLEAR_IMAGE_BUFFER_CMD = "del .\\data\\buffer\\videos\\*.jp
 
 
 //Video Uploader
-static const string cDEFAULT_URL = "http://127.0.0.1/airwaves/s/upload.php";
+static const string cDEFAULT_URL = "http://airwaves.artgital.com/airwaves/s/upload.php";
 static const string cFB_SHARE_URL = "http://www.facebook.com/sharer/sharer.php?u=http://airwaves.artgital.com/airwaves/viewer/index.php?id=";
 #endif // !AIRWAVES_CONST_PARAMETER
