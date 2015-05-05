@@ -51,6 +51,11 @@ namespace NAME_MGR
 	CREATE_VALUE(A_TeachingRomaMessage1);
 	CREATE_VALUE(A_TeachingRomaMessage2);
 
+	CREATE_VALUE(A_TeachingMoneyIcon1);
+	CREATE_VALUE(A_TeachingMoneyIcon2);
+	CREATE_VALUE(A_TeachingMoneyMessage1);
+	CREATE_VALUE(A_TeachingMoneyMessage2);
+
 	//TODO Money
 	CREATE_VALUE(A_GamingAngel);
 	CREATE_VALUE(A_GamingAlien);

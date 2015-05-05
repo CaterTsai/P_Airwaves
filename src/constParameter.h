@@ -16,7 +16,7 @@ typedef enum eCHARACTER_TYPE
 };
 
 //Theatre
-const eCHARACTER_TYPE cCHARACTER_MAX_TYPE = eCHARACTER_MONEY;
+const eCHARACTER_TYPE cCHARACTER_MAX_TYPE = eCHARACTER_NUM;
 const int cSECOND_TEACHING_TIMEOUT = 5.0;
 const int cSECOND_GAMING_TIMEOUT = 10.0;
 const int cSECOND_GAMING_RECODEING = 4.0;
@@ -87,11 +87,12 @@ static const string cCOMBIND_VIDEO_MONEY_CMD = "ffmpeg -y -i \"concat:data/buffe
 											   -i data/buffer/bgm.wav -shortest \
 											  -vf \"scale=" + cVIDEO_SIZE + "\" data/results/";
 
+
 static const string cCLEAR_VIDEO_BUFFER_CMD = "del .\\data\\buffer\\pic\\*.jpg";
 static const string cCLEAR_IMAGE_BUFFER_CMD = "del .\\data\\buffer\\videos\\*.jpg";
-
 
 //Video Uploader
 static const string cDEFAULT_URL = "http://airwaves.artgital.com/airwaves/s/upload.php";
 static const string cFB_SHARE_URL = "http://www.facebook.com/sharer/sharer.php?u=http://airwaves.artgital.com/airwaves/viewer/index.php?id=";
+
 #endif // !AIRWAVES_CONST_PARAMETER
