@@ -73,7 +73,6 @@ void ofxCTImageSequence::setup(int iThreadNum, string strPrefix, string strForma
 //--------------------------------------------------------------
 void ofxCTImageSequence::update()
 {
-	
 	if(!_bIsSetup)
 	{
 		return;
@@ -136,9 +135,11 @@ void ofxCTImageSequence::startRecode(float fDuration)
 //--------------------------------------------------------------
 void ofxCTImageSequence::stopRecode()
 {
-	if(!_bStart && _iTotalFrame == 0)
+	if(_bStart &&  _iCounter != _iTotalFrame)
 	{
 		_bStart = false;
+		string strMsg = "RECORD_FAILED";
+		ofNotifyEvent(ImageSequenceEvent, strMsg, this);
 	}
 }
 
