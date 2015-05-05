@@ -29,10 +29,6 @@ private:
 	bool	_bCtrlMode;
 	float	_fMainTimer;
 	string	_UserID;
-
-
-	float	_fConnectionTimer;
-	bool	_bIsConnecion;
 //-------------------------------------------------
 //Theatre
 //-------------------------------------------------
@@ -50,6 +46,7 @@ public:
 			_AnimBGAlpha.animateFromTo(0, 255);
 		}
 	}
+
 	inline void disableBackground()
 	{
 		if(!_AnimBGAlpha.isAnimating())
@@ -57,32 +54,18 @@ public:
 			_AnimBGAlpha.animateFromTo(255, 0);
 		}
 	}
-	inline void enableLogo()
-	{
-		if(!_AnimLogoAlpha.isAnimating())
-		{
-			_AnimLogoAlpha.animateFromTo(0, 255);
-		}
-	}
-	inline void disableLogo()
-	{
-		if(!_AnimLogoAlpha.isAnimating())
-		{
-			_AnimLogoAlpha.animateFromTo(255, 0);
-		}
-	}
 
 private:
 	AirwavesTheatre		_Theatre;
 	ofImage				_Background;
-	ofImage				_Logo;
-	ofxAnimatableFloat	_AnimBGAlpha, _AnimLogoAlpha;
+	ofxAnimatableFloat	_AnimBGAlpha;
 
 //-------------------------------------------------
 //Audio checker
 //-------------------------------------------------
 public:
 	void onAudioEvent(bool& e);
+
 private:
 	AudioCheck	_MicChecker;
 

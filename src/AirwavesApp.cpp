@@ -6,7 +6,6 @@ void AirwavesApp::setup()
 {
 	ofBackground(0);
 	ofSetVerticalSync(true);
-	ofLogToFile(ofGetTimestampString("Log_%m%d"), true);
 
 	//Config
 	this->loadconfig();
@@ -27,6 +26,7 @@ void AirwavesApp::setup()
 	//Audio
 	_MicChecker.setup(_exAudioThreshold);
 	ofAddListener(_MicChecker._AudioEvent, this, &AirwavesApp::onAudioEvent);
+	_MicChecker.setCheck(true);
 
 	//Connector
 	if(_exUseSerial)
@@ -47,8 +47,6 @@ void AirwavesApp::setup()
 	//User ID
 	_UserID = ofGetTimestampString("%m%d%H%M%S");
 
-	_fConnectionTimer = 0.0;
-	_bIsConnecion = false;
 	_bCtrlMode = false;
 	ofHideCursor();
 	ofToggleFullscreen();
@@ -67,22 +65,10 @@ void AirwavesApp::update()
 
 	//Theatre
 	_AnimBGAlpha.update(fDelta_);
-	_AnimLogoAlpha.update(fDelta_);
 	_Theatre.updateTheatre(fDelta_);
 
 	//Connector
 	_Connector->updateConnector();
-
-	//Projector check
-	if(!_bIsConnecion && _Theatre._Director.GetNowScenes()->GetScenesName() == NAME_MGR::S_Start)
-	{
-		_fConnectionTimer -= fDelta_;
-		if(_fConnectionTimer <= 0)
-		{
-			_Connector->sendCMD(eCONNECTOR_CMD::eD2P_ARE_U_READY);
-			_fConnectionTimer = 3.0;
-		}
-	}
 
 	ofSetWindowTitle(ofToString(ofGetFrameRate()));
 }
@@ -111,7 +97,6 @@ void AirwavesApp::exit()
 void AirwavesApp::reset()
 {
 	_AnimBGAlpha.reset(255);
-	_AnimLogoAlpha.reset(255);
 	
 	//reset picture conuter
 	_iPictureCounter = 0;
@@ -237,11 +222,6 @@ void AirwavesApp::keyPressed(int key)
 			ofLog(OF_LOG_NOTICE, "[Main] Save config complete");
 		}
 		break;
-	case 'r':
-		{
-			_Theatre.resetTheatre();
-		}
-		break;
 	}
 }
 #pragma endregion
@@ -255,16 +235,11 @@ void AirwavesApp::initTheatre()
 	_Theatre.setupTheatre();
 	ofAddListener(_Theatre.AirwavesTheaterEvent, this, &AirwavesApp::onTheatreEvent);
 
-	//Background & Logo
+	//Background
 	_Background.loadImage("images/background.jpg");
 	_AnimBGAlpha.setDuration(cSECOND_BACKGROUND_FADE);
 	_AnimBGAlpha.setRepeatType(AnimRepeat::PLAY_ONCE);
 	_AnimBGAlpha.reset(255);
-
-	_Logo.loadImage("images/logo.png");
-	_AnimLogoAlpha.setDuration(1);
-	_AnimLogoAlpha.setRepeatType(AnimRepeat::PLAY_ONCE);
-	_AnimLogoAlpha.reset(255);
 }
 
 //--------------------------------------------------------------
@@ -276,29 +251,13 @@ void AirwavesApp::drawBeforeTheatre()
 
 		ofSetColor(255, 255, 255, _AnimBGAlpha.getCurrentValue());
 		_Background.draw(0, 0);
-
-		ofSetColor(255, 255, 255, _AnimLogoAlpha.getCurrentValue());
-		_Logo.draw(0, 0);		
 	}
 	ofPopStyle();
 }
 
 //--------------------------------------------------------------
 void AirwavesApp::drawAfterTheatre()
-{	
-	ofPushStyle();
-	{
-		if(_Theatre._Director.GetNowScenes()->GetScenesName() == NAME_MGR::S_Start)
-		{
-			ofFill();
-			if(!_bIsConnecion)
-			{
-				ofSetColor(255, 0, 0);
-				ofCircle(10, 10, 10);
-			}
-		}
-	}
-	ofPopStyle();
+{
 }
 
 //--------------------------------------------------------------
@@ -311,8 +270,6 @@ void AirwavesApp::onTheatreEvent(string& e)
 
 		//Display webcam
 		this->setDisplay(true);
-
-		this->disableLogo();
 	}
 	else if(e == NAME_MGR::EVENT_TeachingTimeout)
 	{
@@ -342,8 +299,6 @@ void AirwavesApp::onTheatreEvent(string& e)
 
 		//Close webcam
 		this->setDisplay(false);
-
-		_ImageRecorder.stopRecode();
 	}
 	else if(e == NAME_MGR::EVENT_Reset)
 	{
@@ -363,7 +318,6 @@ void AirwavesApp::onAudioEvent(bool& e)
 {
 	if(_Theatre._Director.GetNowScenes()->GetScenesName() == NAME_MGR::S_Start)
 	{
-		ofLog(OF_LOG_NOTICE, "New User : " + _UserID);
 		_Theatre.nextScence();
 	}
 }
@@ -509,11 +463,6 @@ void AirwavesApp::onImageRecoderEvent(string& e)
 		//ofSetFrameRate(60);
 		//this->setDisplay(false);
 	}
-	else if(e == "RECORD_FAILED")
-	{
-		ofLog(OF_LOG_ERROR, "[ofxCTImageSequence] failed!!");
-		this->startVideoCreate();
-	}
 }
 
 //--------------------------------------------------------------
@@ -596,8 +545,7 @@ void AirwavesApp::startVideoCreate()
 		_VideoCreate.addCMD(cCOMBIND_VIDEO_MONEY_CMD + _UserID + ".mp4");
 		break;
 	}
-	_VideoCreate.addCMD(cCLEAR_VIDEO_BUFFER_CMD);
-	_VideoCreate.addCMD(cCLEAR_IMAGE_BUFFER_CMD);
+
 	_VideoCreate.signal();
 }
 
@@ -605,7 +553,6 @@ void AirwavesApp::startVideoCreate()
 void AirwavesApp::onVideoCreateEvent(string& e)
 {
 	ofLog(OF_LOG_NOTICE, "[Video Create]Create Video complete");
-		
 	this->uploadVideo();
 }
 
@@ -651,14 +598,6 @@ void AirwavesApp::onConnectorEvent(pair<eCONNECTOR_CMD, string>& e)
 {
 	switch(e.first)
 	{
-	case eP2D_IM_READY:
-		{
-			if(_Theatre._Director.GetNowScenes()->GetScenesName() == NAME_MGR::S_Start)
-			{
-				_bIsConnecion = true;
-				_MicChecker.setCheck(true);
-			}
-		}
 	case eP2D_TEACHING_CHECK:
 		{
 			if(_Theatre._Director.GetNowScenes()->GetScenesName() == NAME_MGR::S_Teching)

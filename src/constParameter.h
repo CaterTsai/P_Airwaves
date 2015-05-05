@@ -87,8 +87,8 @@ static const string cCOMBIND_VIDEO_MONEY_CMD = "ffmpeg -y -i \"concat:data/buffe
 											   -i data/buffer/bgm.wav -shortest \
 											  -vf \"scale=" + cVIDEO_SIZE + "\" data/results/";
 
-static const string cCLEAR_VIDEO_BUFFER_CMD = "del .\\data\\buffer\\videos\\*.jpg";
-static const string cCLEAR_IMAGE_BUFFER_CMD = "del .\\data\\buffer\\pic\\*.jpg";
+static const string cCLEAR_VIDEO_BUFFER_CMD = "del .\\data\\buffer\\pic\\*.jpg";
+static const string cCLEAR_IMAGE_BUFFER_CMD = "del .\\data\\buffer\\videos\\*.jpg";
 
 
 //Video Uploader

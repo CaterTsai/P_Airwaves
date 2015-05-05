@@ -222,7 +222,7 @@ void AirwavesTheatre::resetTheatre()
 	string strEventMsg_ = NAME_MGR::EVENT_Reset;
 	ofNotifyEvent(AirwavesTheaterEvent, strEventMsg_, this);
 	_bCanFinish = false;
-	_Director.TransitTo(NAME_MGR::S_Start);
+	_Director.TransitTo();
 }
 
 //--------------------------------------------------------------
@@ -352,7 +352,6 @@ void AirwavesTheatre::onTheatreEvent(ofxTheatreEventArgs& e)
 				_Director.GetElementPtr(NAME_MGR::E_TeachingMessage2, pVideoElement_);
 				pVideoElement_->ChangeVideoActor(pVideoActor_);
 				pVideoElement_->PlayVideo();
-				pVideoElement_->SetPos(ofPoint(cWINDOW_WIDTH/2.0 - pVideoElement_->GetWidth()/2, cWINDOW_HEIGHT - 200));
 
 			}
 			break;
@@ -375,7 +374,6 @@ void AirwavesTheatre::onTheatreEvent(ofxTheatreEventArgs& e)
 				_Director.GetElementPtr(NAME_MGR::E_TeachingMessage2, pVideoElement_);
 				pVideoElement_->ChangeVideoActor(pVideoActor_);
 				pVideoElement_->PlayVideo();
-				pVideoElement_->SetPos(ofPoint(cWINDOW_WIDTH/2.0 - pVideoElement_->GetWidth()/2, cWINDOW_HEIGHT - 200));
 			}
 			break;
 		case eCHARACTER_TYPE::eCHARACTER_ROMA:
@@ -403,10 +401,10 @@ void AirwavesTheatre::onTheatreEvent(ofxTheatreEventArgs& e)
 				_Director.GetElementPtr(NAME_MGR::E_TeachingMessage2, pVideoElement_);
 				pVideoElement_->ChangeVideoActor(pVideoActor_);
 				pVideoElement_->PlayVideo();
-				pVideoElement_->SetPos(ofPoint(cWINDOW_WIDTH/2.0 - pVideoElement_->GetWidth()/2, cWINDOW_HEIGHT - 200));
 			}
 			break;
 		}
+
 		string strEventMsg_ = NAME_MGR::EVENT_StartTeaching;
 		ofNotifyEvent(AirwavesTheaterEvent, strEventMsg_, this);
 
