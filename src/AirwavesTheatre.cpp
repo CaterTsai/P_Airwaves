@@ -54,6 +54,12 @@ void AirwavesTheatre::setupTheatre()
 	_Director.AddActor(new ofxVideoActor(NAME_MGR::A_TeachingRomaMessage1, "videos/roma/teaching_message1.mov", ofPtr<ofGstVideoPlayer>(new ofGstVideoPlayer), eBLEND_ALPHA));
 	_Director.AddActor(new ofxVideoActor(NAME_MGR::A_TeachingRomaMessage2, "videos/roma/teaching_message2.mov", ofPtr<ofGstVideoPlayer>(new ofGstVideoPlayer), eBLEND_ALPHA));
 	
+	////Money
+	_Director.AddActor(new ofxVideoActor(NAME_MGR::A_TeachingMoneyIcon1, "videos/money/teaching_icon1.mov", ofPtr<ofGstVideoPlayer>(new ofGstVideoPlayer), eBLEND_ALPHA));
+	_Director.AddActor(new ofxVideoActor(NAME_MGR::A_TeachingMoneyIcon2, "videos/money/teaching_icon2.mov", ofPtr<ofGstVideoPlayer>(new ofGstVideoPlayer), eBLEND_ALPHA));
+	_Director.AddActor(new ofxVideoActor(NAME_MGR::A_TeachingMoneyMessage1, "videos/money/teaching_message1.mov", ofPtr<ofGstVideoPlayer>(new ofGstVideoPlayer), eBLEND_ALPHA));
+	_Director.AddActor(new ofxVideoActor(NAME_MGR::A_TeachingMoneyMessage2, "videos/money/teaching_message2.mov", ofPtr<ofGstVideoPlayer>(new ofGstVideoPlayer), eBLEND_ALPHA));
+
 	//S_Gaming	
 	_Director.AddActor(new ofxVideoActor(NAME_MGR::A_GamingAngel, "videos/angel/gaming.mp4", ofPtr<ofGstVideoPlayer>(new ofGstVideoPlayer), eBLEND_SCREEN));
 	_Director.AddActor(new ofxVideoActor(NAME_MGR::A_GamingAlien, "videos/alien/gaming.mp4", ofPtr<ofGstVideoPlayer>(new ofGstVideoPlayer), eBLEND_SCREEN));
@@ -286,7 +292,8 @@ void AirwavesTheatre::onTheatreEvent(ofxTheatreEventArgs& e)
 		ofxVideoElement* pCharacterVideo_ = nullptr;
 		ofxVideoElement* pGamingVideo_ = nullptr;
 		_Director.GetElementPtr(NAME_MGR::E_GameTitle, pGamingVideo_);
-		this->setCharacterType( (eCHARACTER_TYPE)(_Counter % cCHARACTER_MAX_TYPE) );
+		//this->setCharacterType( (eCHARACTER_TYPE)(_Counter % cCHARACTER_MAX_TYPE) );
+		this->setCharacterType( eCHARACTER_MONEY );
 		_Counter++;
 		switch(_eCharacterType)
 		{
@@ -315,6 +322,15 @@ void AirwavesTheatre::onTheatreEvent(ofxTheatreEventArgs& e)
 					pCharacterVideo_->PlayVideo();
 				}
 				pGamingVideo_->ChangeVideoActor(dynamic_cast<ofxVideoActor*>(_Director.GetActor(NAME_MGR::A_GamingRoma)));
+			}
+			break;
+		case eCHARACTER_TYPE::eCHARACTER_MONEY:
+			{
+				if(_Director.GetElementPtr(NAME_MGR::E_CharacterMoney, pCharacterVideo_))
+				{
+					pCharacterVideo_->PlayVideo();
+				}
+				pGamingVideo_->ChangeVideoActor(dynamic_cast<ofxVideoActor*>(_Director.GetActor(NAME_MGR::A_GamingMoney)));
 			}
 			break;
 		}
@@ -404,6 +420,34 @@ void AirwavesTheatre::onTheatreEvent(ofxTheatreEventArgs& e)
 				pVideoElement_->ChangeVideoActor(pVideoActor_);
 				pVideoElement_->PlayVideo();
 				pVideoElement_->SetPos(ofPoint(cWINDOW_WIDTH/2.0 - pVideoElement_->GetWidth()/2, cWINDOW_HEIGHT - 200));
+			}
+			break;
+		case eCHARACTER_TYPE::eCHARACTER_MONEY:
+			{
+				//Icon 1
+				pVideoActor_ = dynamic_cast<ofxVideoActor*>(_Director.GetActor(NAME_MGR::A_TeachingMoneyIcon1));
+				_Director.GetElementPtr(NAME_MGR::E_TeachingIcon1, pVideoElement_);
+				pVideoElement_->ChangeVideoActor(pVideoActor_);
+				pVideoElement_->PlayVideo();
+
+				//Icon 2
+				pVideoActor_ = dynamic_cast<ofxVideoActor*>(_Director.GetActor(NAME_MGR::A_TeachingMoneyIcon2));
+				_Director.GetElementPtr(NAME_MGR::E_TeachingIcon2, pVideoElement_);
+				pVideoElement_->ChangeVideoActor(pVideoActor_);
+				pVideoElement_->PlayVideo();
+
+				//Message 1
+				pVideoActor_ = dynamic_cast<ofxVideoActor*>(_Director.GetActor(NAME_MGR::A_TeachingMoneyMessage1));
+				_Director.GetElementPtr(NAME_MGR::E_TeachingMessage1, pVideoElement_);
+				pVideoElement_->ChangeVideoActor(pVideoActor_);
+				pVideoElement_->PlayVideo();
+
+				//Message 2
+				pVideoActor_ = dynamic_cast<ofxVideoActor*>(_Director.GetActor(NAME_MGR::A_TeachingMoneyMessage2));
+				_Director.GetElementPtr(NAME_MGR::E_TeachingMessage2, pVideoElement_);
+				pVideoElement_->ChangeVideoActor(pVideoActor_);
+				pVideoElement_->PlayVideo();
+
 			}
 			break;
 		}

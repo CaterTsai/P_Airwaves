@@ -6,7 +6,7 @@ void AirwavesApp::setup()
 {
 	ofBackground(0);
 	ofSetVerticalSync(true);
-	ofLogToFile(ofGetTimestampString("Log_%m%d"), true);
+	//ofLogToFile(ofGetTimestampString("Log_%m%d"), true);
 
 	//Config
 	this->loadconfig();
@@ -596,8 +596,8 @@ void AirwavesApp::startVideoCreate()
 		_VideoCreate.addCMD(cCOMBIND_VIDEO_MONEY_CMD + _UserID + ".mp4");
 		break;
 	}
-	_VideoCreate.addCMD(cCLEAR_VIDEO_BUFFER_CMD);
-	_VideoCreate.addCMD(cCLEAR_IMAGE_BUFFER_CMD);
+	//_VideoCreate.addCMD(cCLEAR_VIDEO_BUFFER_CMD);
+	//_VideoCreate.addCMD(cCLEAR_IMAGE_BUFFER_CMD);
 	_VideoCreate.signal();
 }
 
