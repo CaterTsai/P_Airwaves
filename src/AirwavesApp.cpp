@@ -596,8 +596,8 @@ void AirwavesApp::startVideoCreate()
 		_VideoCreate.addCMD(cCOMBIND_VIDEO_MONEY_CMD + _UserID + ".mp4");
 		break;
 	}
-	//_VideoCreate.addCMD(cCLEAR_VIDEO_BUFFER_CMD);
-	//_VideoCreate.addCMD(cCLEAR_IMAGE_BUFFER_CMD);
+	_VideoCreate.addCMD(cCLEAR_VIDEO_BUFFER_CMD);
+	_VideoCreate.addCMD(cCLEAR_IMAGE_BUFFER_CMD);
 	_VideoCreate.signal();
 }
 
@@ -665,8 +665,7 @@ void AirwavesApp::onConnectorEvent(pair<eCONNECTOR_CMD, string>& e)
 			{
 				_Theatre.TheatreAnimInit(NAME_MGR::AS_FadeOutTeaching1);
 				_Theatre.TheatreAnimInit(NAME_MGR::AS_DisplaySuccess1);
-			}
-			
+			}			
 		}
 		break;
 	case eP2D_TEACHING_END:

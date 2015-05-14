@@ -93,5 +93,5 @@ static const string cCLEAR_IMAGE_BUFFER_CMD = "del .\\data\\buffer\\pic\\*.jpg";
 
 //Video Uploader
 static const string cDEFAULT_URL = "http://airwaves.artgital.com/airwaves/s/upload.php";
-static const string cFB_SHARE_URL = "http://www.facebook.com/sharer/sharer.php?u=http://airwaves.artgital.com/airwaves/viewer/index.php?id=";
+static const string cFB_SHARE_URL = "http://www.facebook.com/sharer/sharer.php?u=http://airwaves.artgital.com/airwaves/tw_viewer/index.php?id=";
 #endif // !AIRWAVES_CONST_PARAMETER

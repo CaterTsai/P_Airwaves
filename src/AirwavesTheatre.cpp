@@ -115,7 +115,7 @@ void AirwavesTheatre::setupTheatre()
 
 	//S_Finish
 	_Director.AddElement(NAME_MGR::E_FinishTVC, NAME_MGR::P_Finish, NAME_MGR::A_FinishTVC, 10);
-	_Director.AddElement(NAME_MGR::E_FinishBG, NAME_MGR::P_Finish, NAME_MGR::A_FinishBG, 0);
+	//_Director.AddElement(NAME_MGR::E_FinishBG, NAME_MGR::P_Finish, NAME_MGR::A_FinishBG, 0);
 #pragma endregion
 
 #pragma region Translate Element
